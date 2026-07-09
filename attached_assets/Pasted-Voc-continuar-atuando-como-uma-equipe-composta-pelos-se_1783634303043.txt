@@ -1,0 +1,610 @@
+Você continuará atuando como uma equipe composta pelos seguintes especialistas:
+
+- Principal Backend Architect
+- Principal Software Engineer
+- Enterprise Solution Architect
+- Senior NestJS Engineer
+- Senior TypeScript Engineer
+- Senior DevOps Engineer
+- Senior Security Engineer
+- Senior PostgreSQL Engineer
+- Senior Redis Engineer
+- Senior RabbitMQ Engineer
+- Senior OpenTelemetry Engineer
+- Senior API Designer
+- Senior SRE
+- Senior QA Engineer
+
+Os Prompts 01, 02, 03 e 04 já definiram toda a arquitetura e a camada de dados.
+
+Agora iniciaremos o desenvolvimento do Backend Core da plataforma NexSupport AI.
+
+==========================================================
+OBJETIVO
+==========================================================
+
+Construir o núcleo do Backend da plataforma.
+
+Este backend será responsável por todos os serviços da plataforma.
+
+Ele deverá ser preparado para suportar:
+
+• Milhões de dispositivos
+
+• Milhões de eventos
+
+• Milhares de empresas
+
+• Multi Tenant
+
+• White Label
+
+• Alta disponibilidade
+
+• Alta escalabilidade
+
+==========================================================
+TECNOLOGIAS
+==========================================================
+
+Utilizar obrigatoriamente:
+
+Node.js LTS
+
+NestJS
+
+TypeScript
+
+Prisma ORM
+
+PostgreSQL
+
+Redis
+
+RabbitMQ
+
+OpenTelemetry
+
+Swagger
+
+OpenAPI
+
+Docker
+
+Docker Compose
+
+Jest
+
+Vitest
+
+ESLint
+
+Prettier
+
+Zod
+
+==========================================================
+ARQUITETURA
+==========================================================
+
+Aplicar obrigatoriamente:
+
+DDD
+
+SOLID
+
+Clean Architecture
+
+Hexagonal Architecture
+
+CQRS
+
+Repository Pattern
+
+Factory Pattern
+
+Dependency Injection
+
+Unit of Work
+
+Event Driven
+
+Outbox Pattern
+
+Saga Pattern
+
+==========================================================
+ESTRUTURA DO MONOREPO
+==========================================================
+
+Criar um monorepo utilizando Turborepo.
+
+Estrutura sugerida:
+
+apps/
+
+ api-gateway
+
+ auth-service
+
+ tenant-service
+
+ inventory-service
+
+ monitoring-service
+
+ ai-service
+
+ notification-service
+
+ ticket-service
+
+ discovery-service
+
+ printer-service
+
+ automation-service
+
+packages/
+
+ config
+
+ database
+
+ auth
+
+ logger
+
+ telemetry
+
+ events
+
+ sdk
+
+ ui-types
+
+ common
+
+libs/
+
+ shared
+
+ contracts
+
+ dto
+
+ validation
+
+ enums
+
+infra/
+
+ docker
+
+ kubernetes
+
+ github-actions
+
+docs/
+
+==========================================================
+API GATEWAY
+==========================================================
+
+Implementar um API Gateway responsável por:
+
+Autenticação
+
+Autorização
+
+Rate Limit
+
+Cache
+
+Compressão
+
+Versionamento
+
+Logs
+
+Observabilidade
+
+Balanceamento
+
+Circuit Breaker
+
+Retries
+
+Timeouts
+
+==========================================================
+AUTENTICAÇÃO
+==========================================================
+
+Implementar:
+
+JWT
+
+OAuth2
+
+OIDC
+
+Refresh Token
+
+MFA
+
+Passkeys (WebAuthn)
+
+SSO
+
+Azure AD
+
+Google
+
+Microsoft
+
+LDAP
+
+Active Directory
+
+==========================================================
+MULTI TENANT
+==========================================================
+
+Implementar isolamento completo.
+
+Cada Tenant deverá possuir:
+
+Usuários
+
+Dispositivos
+
+Licenças
+
+Chamados
+
+Inventário
+
+Scripts
+
+IA
+
+Configurações
+
+==========================================================
+RBAC
+==========================================================
+
+Criar papéis:
+
+Super Admin
+
+Administrador
+
+Supervisor
+
+Técnico
+
+Operador
+
+Cliente
+
+Usuário Final
+
+Auditor
+
+Criar sistema de permissões granular.
+
+==========================================================
+MÓDULOS
+==========================================================
+
+Implementar a estrutura base para:
+
+Identity
+
+Tenant
+
+User
+
+Permission
+
+Role
+
+Device
+
+Inventory
+
+Monitoring
+
+Printer
+
+Alert
+
+Notification
+
+Script Library
+
+Knowledge Base
+
+Automation
+
+Ticket
+
+AI
+
+Dashboard
+
+Audit
+
+Billing
+
+Marketplace
+
+==========================================================
+EVENTOS
+==========================================================
+
+Implementar barramento de eventos utilizando RabbitMQ.
+
+Eventos iniciais:
+
+DeviceCreated
+
+DeviceUpdated
+
+DeviceDeleted
+
+InventoryUpdated
+
+AgentConnected
+
+AgentDisconnected
+
+UserCreated
+
+UserUpdated
+
+TenantCreated
+
+AlertCreated
+
+TicketCreated
+
+TicketClosed
+
+AIAnalysisCompleted
+
+==========================================================
+REDIS
+==========================================================
+
+Utilizar para:
+
+Cache
+
+Sessões
+
+Rate Limit
+
+Locks distribuídos
+
+Filas rápidas
+
+==========================================================
+OBSERVABILIDADE
+==========================================================
+
+Integrar:
+
+OpenTelemetry
+
+Prometheus
+
+Grafana
+
+Loki
+
+Tempo
+
+Health Checks
+
+Readiness
+
+Liveness
+
+Tracing
+
+Metrics
+
+Structured Logs
+
+==========================================================
+VALIDAÇÃO
+==========================================================
+
+Utilizar:
+
+Zod
+
+Class Validator
+
+Class Transformer
+
+Sanitização
+
+Validação automática
+
+==========================================================
+SEGURANÇA
+==========================================================
+
+Implementar:
+
+Helmet
+
+CORS
+
+CSRF
+
+XSS Protection
+
+SQL Injection Protection
+
+Rate Limit
+
+Brute Force Protection
+
+Secrets Manager
+
+Criptografia AES-256
+
+TLS
+
+LGPD
+
+OWASP Top 10
+
+==========================================================
+SWAGGER
+==========================================================
+
+Gerar automaticamente:
+
+OpenAPI
+
+Swagger UI
+
+Schemas
+
+DTOs
+
+Exemplos
+
+Versionamento
+
+==========================================================
+TESTES
+==========================================================
+
+Criar:
+
+Testes Unitários
+
+Testes de Integração
+
+Testes E2E
+
+Mock Services
+
+Cobertura mínima de 90%
+
+==========================================================
+CI/CD
+==========================================================
+
+Preparar:
+
+GitHub Actions
+
+Lint
+
+Build
+
+Test
+
+Docker Build
+
+Docker Scan
+
+Deploy
+
+==========================================================
+DOCUMENTAÇÃO
+==========================================================
+
+Gerar automaticamente:
+
+README
+
+Arquitetura
+
+Diagramas
+
+Fluxos
+
+Dependências
+
+Padrões
+
+Convenções
+
+==========================================================
+QUALIDADE
+==========================================================
+
+Todo código deverá seguir:
+
+Clean Code
+
+SOLID
+
+DDD
+
+Performance First
+
+Security First
+
+Escalabilidade
+
+Baixo acoplamento
+
+Alta coesão
+
+==========================================================
+ENTREGÁVEIS
+==========================================================
+
+Gerar:
+
+1. Estrutura completa do monorepo.
+
+2. Backend funcional.
+
+3. API Gateway.
+
+4. Sistema de autenticação.
+
+5. Sistema Multi Tenant.
+
+6. RBAC.
+
+7. Estrutura de módulos.
+
+8. Eventos RabbitMQ.
+
+9. Cache Redis.
+
+10. Observabilidade.
+
+11. Swagger.
+
+12. Testes automatizados.
+
+13. Docker.
+
+14. Docker Compose.
+
+15. GitHub Actions.
+
+16. Documentação completa.
+
+IMPORTANTE
+
+Nunca gerar código incompleto.
+
+Nunca utilizar código de demonstração.
+
+Sempre gerar código Enterprise.
+
+Caso o limite de contexto seja atingido, continuar automaticamente na próxima resposta até concluir toda a implementação.
