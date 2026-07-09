@@ -1,0 +1,538 @@
+Você continuará atuando como Principal Database Engineer, PostgreSQL Expert, Backend Architect e DBA Enterprise.
+
+Os Prompts 01, 02 e 03 já definiram:
+
+- Arquitetura da plataforma
+- Arquitetura dos microserviços
+- Modelagem completa do banco
+
+Agora iniciaremos a implementação da camada de persistência.
+
+Todo código deverá ser de nível Enterprise, preparado para produção e para ambientes SaaS Multi-Tenant.
+
+====================================================
+OBJETIVO
+====================================================
+
+Implementar completamente a infraestrutura de banco de dados da NexSupport AI.
+
+Toda implementação deverá ser compatível com:
+
+PostgreSQL 17
+
+TimescaleDB
+
+pgvector
+
+Redis
+
+MinIO
+
+RabbitMQ
+
+Prisma ORM
+
+NestJS
+
+TypeScript
+
+====================================================
+PADRÕES
+====================================================
+
+Utilizar obrigatoriamente:
+
+UUID como chave primária
+
+Soft Delete
+
+CreatedAt
+
+UpdatedAt
+
+DeletedAt
+
+Versionamento
+
+Optimistic Lock
+
+Auditoria
+
+RLS (Row Level Security)
+
+Tenant Isolation
+
+Migration First
+
+Repository Pattern
+
+====================================================
+ESTRUTURA
+====================================================
+
+Gerar toda estrutura do projeto.
+
+Exemplo:
+
+/database
+
+/prisma
+
+/migrations
+
+/seeds
+
+/functions
+
+/views
+
+/materialized_views
+
+/policies
+
+/triggers
+
+/extensions
+
+/scripts
+
+/docs
+
+====================================================
+PRISMA
+====================================================
+
+Gerar:
+
+schema.prisma completo
+
+Todos os Models
+
+Enums
+
+Relations
+
+Indexes
+
+Unique Constraints
+
+Composite Keys
+
+Default Values
+
+Comentários técnicos
+
+====================================================
+MIGRATIONS
+====================================================
+
+Criar migrations organizadas por módulos.
+
+Exemplo:
+
+001_extensions
+
+002_tenants
+
+003_users
+
+004_roles
+
+005_permissions
+
+006_devices
+
+007_inventory
+
+008_hardware
+
+009_software
+
+010_monitoring
+
+011_metrics
+
+012_alerts
+
+013_printers
+
+014_tickets
+
+015_ai
+
+016_embeddings
+
+017_workflows
+
+018_notifications
+
+019_audit
+
+020_api
+
+021_billing
+
+022_marketplace
+
+023_reports
+
+024_indexes
+
+025_rls
+
+026_materialized_views
+
+027_functions
+
+028_seed
+
+Cada migration deverá possuir rollback seguro.
+
+====================================================
+EXTENSÕES
+====================================================
+
+Instalar automaticamente:
+
+uuid-ossp
+
+pgcrypto
+
+pgvector
+
+timescaledb
+
+citext
+
+unaccent
+
+pg_trgm
+
+btree_gin
+
+btree_gist
+
+====================================================
+TIMESCALEDB
+====================================================
+
+Criar hypertables para:
+
+CPU
+
+RAM
+
+Disco
+
+Temperatura
+
+Rede
+
+SMART
+
+Eventos
+
+Impressoras
+
+SNMP
+
+Alertas
+
+Configurar:
+
+Retention Policy
+
+Compression
+
+Continuous Aggregates
+
+Refresh Policies
+
+====================================================
+PGVECTOR
+====================================================
+
+Implementar tabelas para:
+
+Embeddings
+
+Knowledge Base
+
+Scripts
+
+Comandos
+
+Logs
+
+Diagnósticos
+
+Fabricantes
+
+Procedimentos
+
+Criar índices vetoriais apropriados (HNSW ou IVFFlat, conforme o caso).
+
+====================================================
+FUNÇÕES
+====================================================
+
+Criar funções SQL para:
+
+Health Score
+
+Inventário consolidado
+
+Detecção de duplicidade
+
+Conformidade de software
+
+Resumo executivo
+
+Resumo técnico
+
+Uso de licenças
+
+SLA
+
+Performance
+
+Topologia
+
+====================================================
+MATERIALIZED VIEWS
+====================================================
+
+Criar views materializadas para:
+
+Dashboard Executivo
+
+Dashboard Técnico
+
+Inventário
+
+Performance
+
+Impressoras
+
+Licenças
+
+Chamados
+
+Alertas
+
+IA
+
+Atualizações
+
+====================================================
+RLS
+====================================================
+
+Implementar Row Level Security em todas as tabelas multi-tenant.
+
+Criar políticas para:
+
+Administrador Global
+
+Administrador da Empresa
+
+Supervisor
+
+Técnico
+
+Operador
+
+Cliente
+
+Usuário Final
+
+Auditor
+
+====================================================
+AUDITORIA
+====================================================
+
+Criar auditoria automática para:
+
+INSERT
+
+UPDATE
+
+DELETE
+
+LOGIN
+
+LOGOUT
+
+Mudanças críticas
+
+Execução de scripts
+
+Alterações de permissões
+
+Inventário
+
+Licenças
+
+====================================================
+SEEDS
+====================================================
+
+Gerar dados iniciais para:
+
+Permissões
+
+Papéis
+
+Categorias
+
+Fabricantes
+
+Modelos
+
+Tipos de ativos
+
+Status
+
+Prioridades
+
+Categorias de chamados
+
+Tipos de licença
+
+Tipos de alerta
+
+Fabricantes de impressoras
+
+Fabricantes de hardware
+
+Protocolos SNMP
+
+====================================================
+PERFORMANCE
+====================================================
+
+Criar índices otimizados utilizando:
+
+BTREE
+
+GIN
+
+GiST
+
+BRIN
+
+Hash
+
+Full Text Search
+
+Trigram
+
+Particionamento quando apropriado.
+
+====================================================
+BACKUP
+====================================================
+
+Preparar scripts para:
+
+Backup completo
+
+Backup incremental
+
+PITR
+
+Restore
+
+Snapshots
+
+Validação de integridade
+
+====================================================
+TESTES
+====================================================
+
+Criar testes automatizados para:
+
+Migrações
+
+Constraints
+
+RLS
+
+Índices
+
+Functions
+
+Views
+
+Materialized Views
+
+Performance
+
+====================================================
+DOCUMENTAÇÃO
+====================================================
+
+Gerar automaticamente:
+
+README técnico
+
+MER atualizado
+
+Dicionário de dados
+
+Dependências
+
+Estrutura das migrations
+
+Guia de manutenção
+
+Boas práticas
+
+====================================================
+QUALIDADE
+====================================================
+
+Todo código deverá seguir:
+
+Clean Code
+
+SOLID
+
+DDD
+
+Prisma Best Practices
+
+Performance First
+
+Security First
+
+LGPD
+
+OWASP
+
+====================================================
+SAÍDA ESPERADA
+====================================================
+
+Gerar:
+
+1. Estrutura completa da pasta /database.
+2. schema.prisma completo.
+3. Todas as migrations organizadas por módulo.
+4. Scripts de instalação.
+5. Scripts de backup e restore.
+6. Seeds iniciais.
+7. Policies de RLS.
+8. Functions SQL.
+9. Materialized Views.
+10. Documentação técnica completa.
+
+IMPORTANTE
+
+Não resuma nenhuma etapa.
+
+Caso a resposta exceda o limite de contexto, continue automaticamente na próxima resposta mantendo a numeração e a ordem dos arquivos.
+
+Considere esta implementação como a base definitiva da NexSupport AI, preparada para ambientes corporativos com milhões de dispositivos monitorados e milhares de empresas (multi-tenant).
