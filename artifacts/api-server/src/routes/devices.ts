@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { eq, and, ilike, type SQL } from "drizzle-orm";
-import { db, devicesTable } from "@workspace/db";
+import { db, devicesTable, notDeleted } from "@workspace/db";
 import {
   ListDevicesQueryParams,
   CreateDeviceBody,
@@ -20,7 +20,7 @@ import {
 const router: IRouter = Router();
 
 router.get("/devices/stats", async (req, res): Promise<void> => {
-  const devices = await db.select().from(devicesTable);
+  const devices = await db.select().from(devicesTable).where(notDeleted(devicesTable.deletedAt));
 
   const byStatus: Record<string, number> = {};
   const byType: Record<string, number> = {};
@@ -45,14 +45,12 @@ router.get("/devices", async (req, res): Promise<void> => {
     return;
   }
 
-  const conditions: SQL[] = [];
+  const conditions: SQL[] = [notDeleted(devicesTable.deletedAt)];
   if (query.data.status) conditions.push(eq(devicesTable.status, query.data.status as any));
   if (query.data.type) conditions.push(eq(devicesTable.type, query.data.type as any));
   if (query.data.search) conditions.push(ilike(devicesTable.name, `%${query.data.search}%`));
 
-  const devices = conditions.length > 0
-    ? await db.select().from(devicesTable).where(and(...conditions))
-    : await db.select().from(devicesTable);
+  const devices = await db.select().from(devicesTable).where(and(...conditions));
 
   res.json(ListDevicesResponse.parse(devices));
 });
@@ -70,7 +68,8 @@ router.post("/devices", async (req, res): Promise<void> => {
 router.get("/devices/:id", async (req, res): Promise<void> => {
   const params = GetDeviceParams.safeParse({ id: Number(req.params.id) });
   if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
-  const [device] = await db.select().from(devicesTable).where(eq(devicesTable.id, params.data.id));
+  const [device] = await db.select().from(devicesTable)
+    .where(and(eq(devicesTable.id, params.data.id), notDeleted(devicesTable.deletedAt)));
   if (!device) { res.status(404).json({ error: "Not found" }); return; }
   res.json(GetDeviceResponse.parse(device));
 });
@@ -79,7 +78,9 @@ router.patch("/devices/:id", async (req, res): Promise<void> => {
   const params = UpdateDeviceParams.safeParse({ id: Number(req.params.id) });
   const body = UpdateDeviceBody.safeParse(req.body);
   if (!params.success || !body.success) { res.status(400).json({ error: "Invalid input" }); return; }
-  const [updated] = await db.update(devicesTable).set(body.data as any).where(eq(devicesTable.id, params.data.id)).returning();
+  const [updated] = await db.update(devicesTable).set(body.data as any)
+    .where(and(eq(devicesTable.id, params.data.id), notDeleted(devicesTable.deletedAt)))
+    .returning();
   if (!updated) { res.status(404).json({ error: "Not found" }); return; }
   res.json(UpdateDeviceResponse.parse(updated));
 });
@@ -87,7 +88,11 @@ router.patch("/devices/:id", async (req, res): Promise<void> => {
 router.delete("/devices/:id", async (req, res): Promise<void> => {
   const params = DeleteDeviceParams.safeParse({ id: Number(req.params.id) });
   if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
-  await db.delete(devicesTable).where(eq(devicesTable.id, params.data.id));
+  // Soft delete: mark deletedAt instead of removing the row, so history/audit is preserved.
+  const [deleted] = await db.update(devicesTable).set({ deletedAt: new Date() })
+    .where(and(eq(devicesTable.id, params.data.id), notDeleted(devicesTable.deletedAt)))
+    .returning();
+  if (!deleted) { res.status(404).json({ error: "Not found" }); return; }
   res.status(204).send();
 });
 

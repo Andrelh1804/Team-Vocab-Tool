@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { eq } from "drizzle-orm";
-import { db, automationsTable } from "@workspace/db";
+import { eq, and } from "drizzle-orm";
+import { db, automationsTable, notDeleted } from "@workspace/db";
 import {
   CreateAutomationBody,
   GetAutomationParams,
@@ -22,7 +22,7 @@ function mapAutomation(a: typeof automationsTable.$inferSelect) {
 }
 
 router.get("/automations", async (req, res): Promise<void> => {
-  const automations = await db.select().from(automationsTable);
+  const automations = await db.select().from(automationsTable).where(notDeleted(automationsTable.deletedAt));
   res.json(ListAutomationsResponse.parse(automations.map(mapAutomation)));
 });
 
@@ -36,7 +36,8 @@ router.post("/automations", async (req, res): Promise<void> => {
 router.get("/automations/:id", async (req, res): Promise<void> => {
   const params = GetAutomationParams.safeParse({ id: Number(req.params.id) });
   if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
-  const [automation] = await db.select().from(automationsTable).where(eq(automationsTable.id, params.data.id));
+  const [automation] = await db.select().from(automationsTable)
+    .where(and(eq(automationsTable.id, params.data.id), notDeleted(automationsTable.deletedAt)));
   if (!automation) { res.status(404).json({ error: "Not found" }); return; }
   res.json(GetAutomationResponse.parse(mapAutomation(automation)));
 });
@@ -45,7 +46,9 @@ router.patch("/automations/:id", async (req, res): Promise<void> => {
   const params = UpdateAutomationParams.safeParse({ id: Number(req.params.id) });
   const body = UpdateAutomationBody.safeParse(req.body);
   if (!params.success || !body.success) { res.status(400).json({ error: "Invalid input" }); return; }
-  const [updated] = await db.update(automationsTable).set(body.data as any).where(eq(automationsTable.id, params.data.id)).returning();
+  const [updated] = await db.update(automationsTable).set(body.data as any)
+    .where(and(eq(automationsTable.id, params.data.id), notDeleted(automationsTable.deletedAt)))
+    .returning();
   if (!updated) { res.status(404).json({ error: "Not found" }); return; }
   res.json(UpdateAutomationResponse.parse(mapAutomation(updated)));
 });
@@ -53,16 +56,22 @@ router.patch("/automations/:id", async (req, res): Promise<void> => {
 router.delete("/automations/:id", async (req, res): Promise<void> => {
   const params = DeleteAutomationParams.safeParse({ id: Number(req.params.id) });
   if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
-  await db.delete(automationsTable).where(eq(automationsTable.id, params.data.id));
+  // Soft delete: mark deletedAt instead of removing the row, so history/audit is preserved.
+  const [deleted] = await db.update(automationsTable).set({ deletedAt: new Date() })
+    .where(and(eq(automationsTable.id, params.data.id), notDeleted(automationsTable.deletedAt)))
+    .returning();
+  if (!deleted) { res.status(404).json({ error: "Not found" }); return; }
   res.status(204).send();
 });
 
 router.post("/automations/:id/toggle", async (req, res): Promise<void> => {
   const params = ToggleAutomationParams.safeParse({ id: Number(req.params.id) });
   if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
-  const [current] = await db.select().from(automationsTable).where(eq(automationsTable.id, params.data.id));
+  const [current] = await db.select().from(automationsTable)
+    .where(and(eq(automationsTable.id, params.data.id), notDeleted(automationsTable.deletedAt)));
   if (!current) { res.status(404).json({ error: "Not found" }); return; }
-  const [updated] = await db.update(automationsTable).set({ isActive: !current.isActive }).where(eq(automationsTable.id, params.data.id)).returning();
+  const [updated] = await db.update(automationsTable).set({ isActive: !current.isActive })
+    .where(eq(automationsTable.id, params.data.id)).returning();
   res.json(ToggleAutomationResponse.parse(mapAutomation(updated)));
 });
 

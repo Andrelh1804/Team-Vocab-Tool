@@ -53,16 +53,21 @@ NexSupport AI is a control-room style IT management platform targeting MSPs and 
 
 _None set yet._
 
-## Multi-tenancy, audit & soft delete (Prompt 04, partial)
+## Enterprise database improvements (Prompt 04, adapted — see `docs/architecture/`)
 
-- Added `tenants` table and a `tenantId` (uuid, FK to `tenants.id`), `updatedAt`, `deletedAt`, `version` column set to every domain table, via `lib/db/src/schema/_tenant-columns.ts` mixed into each schema.
-- A single default tenant (`00000000-0000-0000-0000-000000000001`, slug `default`) is seeded by `lib/db/sql/001_rls_and_audit.sql` and used as the column default, so existing single-tenant behavior is unchanged until the API resolves a real tenant per request.
-- `deletedAt`/soft-delete is schema-only so far: `automations.ts` and `devices.ts` routes still issue hard `DELETE`s. Wiring soft delete into routes (update `deletedAt` instead of deleting, filter it out of reads) is a follow-up, not yet done.
-- `lib/db/sql/001_rls_and_audit.sql` (re-runnable, apply with `psql "$DATABASE_URL" -f lib/db/sql/001_rls_and_audit.sql` after any `pnpm --filter @workspace/db run push`) adds:
-  - Row Level Security policies (`tenant_id = current_setting('app.tenant_id', true)::uuid`) on every tenant table — enabled but not FORCEd, so they are currently inert (the app connects as table owner, which bypasses non-forced RLS). Enforcing them requires a non-owner DB role plus per-request `SET app.tenant_id` in the API layer.
-  - An `audit_log` table + `audit_row_change()` trigger recording INSERT/UPDATE/DELETE (old/new JSON) on every tenant table automatically.
-  - A `bump_version_and_updated_at()` trigger that increments `version` and refreshes `updated_at` on every UPDATE, for optimistic locking.
-- Not done (deliberately out of scope to avoid breaking the running API/frontend contract): UUID primary keys (still `serial` integers), tenant-aware auth/session middleware, per-request tenant filtering in routes, and RLS enforcement. Converting PKs and enforcing RLS would require updating every route, `lib/api-spec/openapi.yaml`, and the generated frontend types — propose as a follow-up task if wanted.
+Full detail lives in `docs/architecture/DATABASE_ARCHITECTURE.md` (current
+state), `docs/architecture/DB_MIGRATION_PLAN_PROMPT04.md` (requirement
+mapping) and `docs/architecture/BACKUP_STRATEGY.md`. Summary:
+
+- **Stack preserved**: still Express + Drizzle + Postgres, `serial` integer PKs. No Prisma/NestJS/microservices.
+- **Multi-tenancy (prepared, not enforced)**: `tenants` table + `tenant_id`/`uuid`/`updatedAt`/`deletedAt`/`version` on every domain table (`lib/db/src/schema/_tenant-columns.ts`). Default tenant seeded; no auth layer resolves a real tenant per request yet.
+- **Soft delete (wired into routes)**: reads use the `notDeleted()` helper (`lib/db/src/index.ts`); `DELETE /devices/:id` and `DELETE /automations/:id` set `deletedAt` instead of removing rows.
+- **RLS**: policies exist, enabled but not FORCEd — inert until a non-owner DB role + per-request `SET app.tenant_id` exist.
+- **Audit + optimistic locking**: `audit_log` table + trigger, `version`/`updatedAt` bump trigger — both fully automatic at the DB layer.
+- **UUID public identifiers**: additive `uuid` column on every domain table alongside the existing integer `id` (not a PK swap — routes/OpenAPI/frontend still use the integer id).
+- **Indexes, constraints, views, functions, materialized views**: added in `lib/db/sql/002_*.sql` and `003_*.sql`; the materialized views/functions are not yet consumed by any route (available for a future perf pass).
+- **Migration tooling**: `pnpm --filter @workspace/db run migrate` applies every file in `lib/db/sql/` in order, idempotently, on top of `pnpm --filter @workspace/db run push`.
+- Deliberately out of scope: TimescaleDB, pgvector, Redis, MinIO, RabbitMQ, UUID-as-PK migration, forced RLS enforcement, the full extended domain model from the original Prompt 04 spec.
 
 ## Gotchas
 

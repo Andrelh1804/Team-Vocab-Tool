@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { db, devicesTable, ticketsTable, alertsTable, automationsTable, scriptsTable, activityTable } from "@workspace/db";
+import { db, devicesTable, ticketsTable, alertsTable, automationsTable, scriptsTable, activityTable, notDeleted } from "@workspace/db";
 import {
   GetExecutiveDashboardResponse,
   GetTechnicalDashboardResponse,
@@ -10,9 +10,9 @@ const router: IRouter = Router();
 
 router.get("/dashboard/executive", async (req, res): Promise<void> => {
   const [devices, tickets, alerts] = await Promise.all([
-    db.select().from(devicesTable),
-    db.select().from(ticketsTable),
-    db.select().from(alertsTable),
+    db.select().from(devicesTable).where(notDeleted(devicesTable.deletedAt)),
+    db.select().from(ticketsTable).where(notDeleted(ticketsTable.deletedAt)),
+    db.select().from(alertsTable).where(notDeleted(alertsTable.deletedAt)),
   ]);
 
   const onlineDevices = devices.filter(d => d.status === "online").length;
@@ -74,10 +74,10 @@ router.get("/dashboard/executive", async (req, res): Promise<void> => {
 
 router.get("/dashboard/technical", async (req, res): Promise<void> => {
   const [devices, alerts, automations, scripts] = await Promise.all([
-    db.select().from(devicesTable),
-    db.select().from(alertsTable),
-    db.select().from(automationsTable),
-    db.select().from(scriptsTable),
+    db.select().from(devicesTable).where(notDeleted(devicesTable.deletedAt)),
+    db.select().from(alertsTable).where(notDeleted(alertsTable.deletedAt)),
+    db.select().from(automationsTable).where(notDeleted(automationsTable.deletedAt)),
+    db.select().from(scriptsTable).where(notDeleted(scriptsTable.deletedAt)),
   ]);
 
   // Device status counts
@@ -122,6 +122,7 @@ router.get("/dashboard/technical", async (req, res): Promise<void> => {
 
 router.get("/dashboard/activity", async (req, res): Promise<void> => {
   const events = await db.select().from(activityTable)
+    .where(notDeleted(activityTable.deletedAt))
     .orderBy(activityTable.timestamp)
     .limit(20);
 

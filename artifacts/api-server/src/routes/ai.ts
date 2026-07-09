@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { eq, and, ilike, type SQL } from "drizzle-orm";
-import { db, devicesTable, scriptsTable, activityTable } from "@workspace/db";
+import { db, devicesTable, scriptsTable, activityTable, notDeleted } from "@workspace/db";
 import {
   AiChatBody,
   DiagnoseDeviceParams,
@@ -66,11 +66,12 @@ router.post("/ai/chat", async (req, res): Promise<void> => {
   };
 
   // Get related scripts
-  const scripts = await db.select().from(scriptsTable).limit(2);
+  const scripts = await db.select().from(scriptsTable).where(notDeleted(scriptsTable.deletedAt)).limit(2);
 
   let contextInfo = "";
   if (deviceId) {
-    const [device] = await db.select().from(devicesTable).where(eq(devicesTable.id, deviceId));
+    const [device] = await db.select().from(devicesTable)
+      .where(and(eq(devicesTable.id, deviceId), notDeleted(devicesTable.deletedAt)));
     if (device) {
       contextInfo = ` (Context: device ${device.name} at ${device.ipAddress}, status: ${device.status})`;
     }
@@ -92,7 +93,8 @@ router.post("/ai/diagnose/:deviceId", async (req, res): Promise<void> => {
   const params = DiagnoseDeviceParams.safeParse({ deviceId: Number(req.params.deviceId) });
   if (!params.success) { res.status(400).json({ error: "Invalid deviceId" }); return; }
 
-  const [device] = await db.select().from(devicesTable).where(eq(devicesTable.id, params.data.deviceId));
+  const [device] = await db.select().from(devicesTable)
+    .where(and(eq(devicesTable.id, params.data.deviceId), notDeleted(devicesTable.deletedAt)));
   if (!device) { res.status(404).json({ error: "Device not found" }); return; }
 
   const issues = [];
@@ -132,7 +134,7 @@ router.post("/ai/diagnose/:deviceId", async (req, res): Promise<void> => {
     severity: criticality,
   });
 
-  const scripts = await db.select().from(scriptsTable).limit(3);
+  const scripts = await db.select().from(scriptsTable).where(notDeleted(scriptsTable.deletedAt)).limit(3);
 
   res.json(DiagnoseDeviceResponse.parse({
     deviceId: device.id,
@@ -153,13 +155,11 @@ router.get("/ai/scripts", async (req, res): Promise<void> => {
   const query = ListScriptsQueryParams.safeParse(req.query);
   if (!query.success) { res.status(400).json({ error: query.error.message }); return; }
 
-  const scriptConditions: SQL[] = [];
+  const scriptConditions: SQL[] = [notDeleted(scriptsTable.deletedAt)];
   if (query.data.language) scriptConditions.push(eq(scriptsTable.language, query.data.language as any));
   if (query.data.search) scriptConditions.push(ilike(scriptsTable.title, `%${query.data.search}%`));
 
-  const scripts = scriptConditions.length > 0
-    ? await db.select().from(scriptsTable).where(and(...scriptConditions))
-    : await db.select().from(scriptsTable);
+  const scripts = await db.select().from(scriptsTable).where(and(...scriptConditions));
 
   res.json(ListScriptsResponse.parse(scripts.map(s => ({
     ...s,

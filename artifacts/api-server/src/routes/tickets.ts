@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { eq, and, ilike, type SQL } from "drizzle-orm";
-import { db, ticketsTable, ticketCommentsTable } from "@workspace/db";
+import { db, ticketsTable, ticketCommentsTable, notDeleted } from "@workspace/db";
 import {
   ListTicketsQueryParams,
   CreateTicketBody,
@@ -21,7 +21,7 @@ import {
 const router: IRouter = Router();
 
 router.get("/tickets/stats", async (req, res): Promise<void> => {
-  const tickets = await db.select().from(ticketsTable);
+  const tickets = await db.select().from(ticketsTable).where(notDeleted(ticketsTable.deletedAt));
 
   const counts: Record<string, number> = { open: 0, in_progress: 0, pending: 0, resolved: 0, closed: 0 };
   const byPriority: Record<string, number> = { critical: 0, high: 0, medium: 0, low: 0 };
@@ -59,15 +59,13 @@ router.get("/tickets", async (req, res): Promise<void> => {
   const query = ListTicketsQueryParams.safeParse(req.query);
   if (!query.success) { res.status(400).json({ error: query.error.message }); return; }
 
-  const conditions: SQL[] = [];
+  const conditions: SQL[] = [notDeleted(ticketsTable.deletedAt)];
   if (query.data.status) conditions.push(eq(ticketsTable.status, query.data.status as any));
   if (query.data.priority) conditions.push(eq(ticketsTable.priority, query.data.priority as any));
   if (query.data.assigneeId) conditions.push(eq(ticketsTable.assigneeId, query.data.assigneeId));
   if (query.data.search) conditions.push(ilike(ticketsTable.title, `%${query.data.search}%`));
 
-  const tickets = conditions.length > 0
-    ? await db.select().from(ticketsTable).where(and(...conditions))
-    : await db.select().from(ticketsTable);
+  const tickets = await db.select().from(ticketsTable).where(and(...conditions));
 
   res.json(ListTicketsResponse.parse(tickets));
 });
@@ -89,7 +87,8 @@ router.post("/tickets", async (req, res): Promise<void> => {
 router.get("/tickets/:id", async (req, res): Promise<void> => {
   const params = GetTicketParams.safeParse({ id: Number(req.params.id) });
   if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
-  const [ticket] = await db.select().from(ticketsTable).where(eq(ticketsTable.id, params.data.id));
+  const [ticket] = await db.select().from(ticketsTable)
+    .where(and(eq(ticketsTable.id, params.data.id), notDeleted(ticketsTable.deletedAt)));
   if (!ticket) { res.status(404).json({ error: "Not found" }); return; }
   res.json(GetTicketResponse.parse(ticket));
 });
@@ -104,7 +103,9 @@ router.patch("/tickets/:id", async (req, res): Promise<void> => {
     update.resolvedAt = new Date();
   }
 
-  const [updated] = await db.update(ticketsTable).set(update as any).where(eq(ticketsTable.id, params.data.id)).returning();
+  const [updated] = await db.update(ticketsTable).set(update as any)
+    .where(and(eq(ticketsTable.id, params.data.id), notDeleted(ticketsTable.deletedAt)))
+    .returning();
   if (!updated) { res.status(404).json({ error: "Not found" }); return; }
   res.json(UpdateTicketResponse.parse(updated));
 });
@@ -112,7 +113,8 @@ router.patch("/tickets/:id", async (req, res): Promise<void> => {
 router.get("/tickets/:id/comments", async (req, res): Promise<void> => {
   const params = AddTicketCommentParams.safeParse({ id: Number(req.params.id) });
   if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
-  const comments = await db.select().from(ticketCommentsTable).where(eq(ticketCommentsTable.ticketId, params.data.id));
+  const comments = await db.select().from(ticketCommentsTable)
+    .where(and(eq(ticketCommentsTable.ticketId, params.data.id), notDeleted(ticketCommentsTable.deletedAt)));
   res.json(ListTicketCommentsResponse.parse(comments));
 });
 
