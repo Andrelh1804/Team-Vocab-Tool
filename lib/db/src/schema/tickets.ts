@@ -1,6 +1,7 @@
 import { pgTable, serial, text, timestamp, integer, boolean, pgEnum } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
+import { tenantColumns } from "./_tenant-columns";
 
 export const ticketStatusEnum = pgEnum("ticket_status", [
   "open", "in_progress", "pending", "resolved", "closed"
@@ -25,6 +26,7 @@ export const ticketsTable = pgTable("tickets", {
   slaDeadline: timestamp("sla_deadline"),
   resolvedAt: timestamp("resolved_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  ...tenantColumns,
 });
 
 export const ticketCommentsTable = pgTable("ticket_comments", {
@@ -34,10 +36,23 @@ export const ticketCommentsTable = pgTable("ticket_comments", {
   authorName: text("author_name").notNull(),
   isInternal: boolean("is_internal").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  ...tenantColumns,
 });
 
-export const insertTicketSchema = createInsertSchema(ticketsTable).omit({ id: true, createdAt: true });
-export const insertCommentSchema = createInsertSchema(ticketCommentsTable).omit({ id: true, createdAt: true });
+export const insertTicketSchema = createInsertSchema(ticketsTable).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+  version: true,
+});
+export const insertCommentSchema = createInsertSchema(ticketCommentsTable).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+  version: true,
+});
 export type InsertTicket = z.infer<typeof insertTicketSchema>;
 export type Ticket = typeof ticketsTable.$inferSelect;
 export type TicketComment = typeof ticketCommentsTable.$inferSelect;

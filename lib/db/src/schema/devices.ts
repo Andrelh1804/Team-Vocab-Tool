@@ -1,6 +1,7 @@
 import { pgTable, serial, text, timestamp, real, pgEnum } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
+import { tenantColumns } from "./_tenant-columns";
 
 export const deviceTypeEnum = pgEnum("device_type", [
   "notebook", "desktop", "server", "printer", "switch",
@@ -31,8 +32,15 @@ export const devicesTable = pgTable("devices", {
   tags: text("tags").array(),
   lastSeen: timestamp("last_seen"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  ...tenantColumns,
 });
 
-export const insertDeviceSchema = createInsertSchema(devicesTable).omit({ id: true, createdAt: true });
+export const insertDeviceSchema = createInsertSchema(devicesTable).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+  version: true,
+});
 export type InsertDevice = z.infer<typeof insertDeviceSchema>;
 export type Device = typeof devicesTable.$inferSelect;

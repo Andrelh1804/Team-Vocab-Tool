@@ -53,6 +53,17 @@ NexSupport AI is a control-room style IT management platform targeting MSPs and 
 
 _None set yet._
 
+## Multi-tenancy, audit & soft delete (Prompt 04, partial)
+
+- Added `tenants` table and a `tenantId` (uuid, FK to `tenants.id`), `updatedAt`, `deletedAt`, `version` column set to every domain table, via `lib/db/src/schema/_tenant-columns.ts` mixed into each schema.
+- A single default tenant (`00000000-0000-0000-0000-000000000001`, slug `default`) is seeded by `lib/db/sql/001_rls_and_audit.sql` and used as the column default, so existing single-tenant behavior is unchanged until the API resolves a real tenant per request.
+- `deletedAt`/soft-delete is schema-only so far: `automations.ts` and `devices.ts` routes still issue hard `DELETE`s. Wiring soft delete into routes (update `deletedAt` instead of deleting, filter it out of reads) is a follow-up, not yet done.
+- `lib/db/sql/001_rls_and_audit.sql` (re-runnable, apply with `psql "$DATABASE_URL" -f lib/db/sql/001_rls_and_audit.sql` after any `pnpm --filter @workspace/db run push`) adds:
+  - Row Level Security policies (`tenant_id = current_setting('app.tenant_id', true)::uuid`) on every tenant table — enabled but not FORCEd, so they are currently inert (the app connects as table owner, which bypasses non-forced RLS). Enforcing them requires a non-owner DB role plus per-request `SET app.tenant_id` in the API layer.
+  - An `audit_log` table + `audit_row_change()` trigger recording INSERT/UPDATE/DELETE (old/new JSON) on every tenant table automatically.
+  - A `bump_version_and_updated_at()` trigger that increments `version` and refreshes `updated_at` on every UPDATE, for optimistic locking.
+- Not done (deliberately out of scope to avoid breaking the running API/frontend contract): UUID primary keys (still `serial` integers), tenant-aware auth/session middleware, per-request tenant filtering in routes, and RLS enforcement. Converting PKs and enforcing RLS would require updating every route, `lib/api-spec/openapi.yaml`, and the generated frontend types — propose as a follow-up task if wanted.
+
 ## Gotchas
 
 - `ticket_comments.is_internal` was originally created as `text`; manually migrated to `boolean` via `ALTER TABLE ... USING (is_internal = 'true')`. The Drizzle schema now correctly declares it as `boolean`.

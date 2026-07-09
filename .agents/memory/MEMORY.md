@@ -1,1 +1,2 @@
 - [i18n setup](i18n-setup.md) — react-i18next with EN/PT, language persisted in localStorage key "nexsupport-lang", date-fns ptBR locale used in all relative date calls.
+- [NexSupport tenant/audit/RLS scope boundary](nexsupport-tenant-migration.md) — tenant/audit/version columns added schema-first; RLS/soft-delete/UUID PKs not yet enforced in routes.

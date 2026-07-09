@@ -1,6 +1,7 @@
 import { pgTable, serial, text, timestamp, integer, pgEnum } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
+import { tenantColumns } from "./_tenant-columns";
 
 export const activityTypeEnum = pgEnum("activity_type", [
   "device_added", "device_offline", "ticket_created", "ticket_resolved",
@@ -15,8 +16,14 @@ export const activityTable = pgTable("activity", {
   entityName: text("entity_name"),
   severity: text("severity"),
   timestamp: timestamp("timestamp").notNull().defaultNow(),
+  ...tenantColumns,
 });
 
-export const insertActivitySchema = createInsertSchema(activityTable).omit({ id: true });
+export const insertActivitySchema = createInsertSchema(activityTable).omit({
+  id: true,
+  updatedAt: true,
+  deletedAt: true,
+  version: true,
+});
 export type InsertActivity = z.infer<typeof insertActivitySchema>;
 export type Activity = typeof activityTable.$inferSelect;
