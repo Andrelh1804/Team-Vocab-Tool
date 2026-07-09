@@ -1,0 +1,634 @@
+Você atuará como uma equipe completa composta por:
+
+- Software Architect
+- Enterprise Solution Architect
+- Senior Backend Engineer
+- Senior Frontend Engineer
+- Senior Windows Engineer
+- Senior Linux Engineer
+- DevOps Engineer
+- SRE
+- DBA PostgreSQL
+- Especialista em Cibersegurança
+- Especialista em Redes
+- Especialista em Active Directory
+- Especialista em Microsoft 365
+- Especialista em Azure
+- Especialista em Linux
+- Especialista em Hardware
+- Especialista em Monitoramento
+- Especialista em SNMP
+- Especialista em Impressoras Corporativas
+- Especialista em Observabilidade
+- Especialista em Inteligência Artificial
+- UX/UI Designer
+- Product Manager
+
+Seu objetivo é desenvolver uma plataforma SaaS Enterprise denominada:
+
+# NexSupport AI
+
+A NexSupport AI será uma plataforma completa para gestão de suporte técnico, monitoramento, inventário de ativos, automação e assistência por Inteligência Artificial.
+
+A plataforma deverá competir com soluções como:
+
+- NinjaOne
+- Atera
+- Lansweeper
+- GLPI
+- OCS Inventory
+- Domotz
+- ManageEngine
+- Pulseway
+- TeamViewer Tensor
+- Microsoft Intune
+- ConnectWise
+
+Porém deverá superar todas elas utilizando IA integrada.
+
+=========================
+OBJETIVOS DO PRODUTO
+=========================
+
+A plataforma deverá possuir:
+
+• Inventário automático
+• Monitoramento em tempo real
+• Descoberta automática da rede
+• Agente Windows
+• Agente Linux
+• Agente macOS
+• Monitoramento sem agente
+• Descoberta SNMP
+• Gestão de licenças
+• Gestão de ativos
+• Monitoramento de impressoras
+• Dashboard executivo
+• Dashboard técnico
+• Base de conhecimento
+• Biblioteca de Scripts
+• Biblioteca CMD
+• Biblioteca PowerShell
+• Biblioteca Bash
+• Biblioteca Python
+• Diagnóstico inteligente
+• IA para suporte técnico
+• Automação
+• RMM
+• Help Desk
+• Gestão de chamados
+• Controle remoto
+• API pública
+• Multiempresa
+• Multi Tenant
+• White Label
+
+=========================
+ARQUITETURA
+=========================
+
+Utilizar arquitetura moderna baseada em microserviços.
+
+Frontend
+
+Next.js
+React 19
+TypeScript
+Tailwind
+Shadcn
+TanStack Query
+React Hook Form
+Zod
+Recharts
+
+Backend
+
+NestJS
+
+Node.js
+
+TypeScript
+
+RabbitMQ
+
+Redis
+
+WebSocket
+
+REST
+
+GraphQL
+
+Banco
+
+PostgreSQL
+
+TimescaleDB
+
+pgvector
+
+Redis
+
+Storage
+
+MinIO
+
+S3
+
+IA
+
+OpenAI
+
+Ollama
+
+Gemma
+
+Qwen
+
+DeepSeek
+
+Llama
+
+RAG
+
+Embeddings
+
+Vetores
+
+=========================
+AGENTE WINDOWS
+=========================
+
+Criar um agente leve em Rust.
+
+O agente deverá funcionar como serviço do Windows.
+
+Consumir menos de 40 MB RAM.
+
+Enviar informações em tempo real.
+
+Atualização automática.
+
+Criptografia ponta a ponta.
+
+Offline Cache.
+
+Compressão.
+
+Delta Update.
+
+Heartbeat.
+
+Watchdog.
+
+Coletar:
+
+Hardware
+
+CPU
+
+RAM
+
+Slots
+
+GPU
+
+SSD
+
+SMART
+
+Temperaturas
+
+Ventoinhas
+
+BIOS
+
+UEFI
+
+TPM
+
+Secure Boot
+
+Monitores
+
+Dock
+
+USB
+
+Discos
+
+Volumes
+
+Sistema
+
+Windows
+
+Build
+
+Licença
+
+Drivers
+
+Usuário
+
+Domínio
+
+Azure AD
+
+Office
+
+Softwares
+
+Licenças
+
+Windows Update
+
+Event Viewer
+
+BSOD
+
+Logs
+
+Serviços
+
+Processos
+
+Rede
+
+DNS
+
+Gateway
+
+IP
+
+DHCP
+
+Wi-Fi
+
+VPN
+
+Velocidade
+
+Latência
+
+Firewall
+
+Antivírus
+
+BitLocker
+
+=========================
+NETWORK DISCOVERY
+=========================
+
+Implementar descoberta automática utilizando:
+
+SNMP
+
+ICMP
+
+ARP
+
+WMI
+
+WinRM
+
+SSH
+
+NetBIOS
+
+LLDP
+
+mDNS
+
+DNS
+
+SMB
+
+HTTP
+
+HTTPS
+
+UPnP
+
+IPP
+
+JetDirect
+
+A plataforma deverá identificar automaticamente:
+
+Notebook
+
+Desktop
+
+Servidor
+
+Impressora
+
+Switch
+
+Firewall
+
+AP
+
+Controladora
+
+Roteador
+
+Nobreak
+
+IoT
+
+NAS
+
+Scanner
+
+=========================
+IMPRESSORAS
+=========================
+
+Implementar monitoramento semelhante ao IBSTracker.
+
+Sem agente.
+
+Via IP.
+
+Capturar:
+
+Modelo
+
+Serial
+
+Firmware
+
+Contadores
+
+Página Mono
+
+Página Colorida
+
+Toner
+
+Drum
+
+Fusor
+
+Kit
+
+Temperaturas
+
+Offline
+
+Fila
+
+Papel
+
+Alertas
+
+SNMP Traps
+
+=========================
+IA
+=========================
+
+Criar um agente de IA especialista em suporte técnico.
+
+Especialidades:
+
+Windows
+
+Linux
+
+Redes
+
+Hardware
+
+Microsoft 365
+
+Azure
+
+Active Directory
+
+Hyper-V
+
+VMware
+
+Proxmox
+
+Cisco
+
+Fortinet
+
+Mikrotik
+
+UniFi
+
+Impressoras
+
+PowerShell
+
+CMD
+
+Bash
+
+Python
+
+SQL
+
+Office
+
+Diagnóstico
+
+A IA deverá analisar automaticamente:
+
+Inventário
+
+Eventos
+
+Logs
+
+SMART
+
+Desempenho
+
+Temperaturas
+
+BSOD
+
+Drivers
+
+Atualizações
+
+Licenças
+
+Rede
+
+Impressoras
+
+Gerando:
+
+Diagnóstico
+
+Causa provável
+
+Nível de criticidade
+
+Solução
+
+Scripts
+
+Comandos
+
+Documentação
+
+=========================
+AUTOMAÇÃO
+=========================
+
+Criar sistema de automação semelhante ao n8n.
+
+Workflows.
+
+Triggers.
+
+Condições.
+
+Execuções remotas.
+
+Scripts.
+
+Alertas.
+
+Integrações.
+
+=========================
+HELP DESK
+=========================
+
+Chamados.
+
+SLA.
+
+Prioridades.
+
+Categorias.
+
+Comentários.
+
+Anexos.
+
+Workflow.
+
+Portal do usuário.
+
+Portal técnico.
+
+=========================
+SEGURANÇA
+=========================
+
+OAuth
+
+OIDC
+
+JWT
+
+MFA
+
+RBAC
+
+RLS
+
+LGPD
+
+Logs
+
+Auditoria
+
+Criptografia
+
+TLS
+
+Secrets
+
+=========================
+DASHBOARDS
+=========================
+
+Executivo
+
+Técnico
+
+Financeiro
+
+Inventário
+
+Licenças
+
+Alertas
+
+Rede
+
+Impressoras
+
+Performance
+
+Disponibilidade
+
+SLA
+
+=========================
+MÓDULOS
+=========================
+
+Organize todo o sistema utilizando arquitetura modular.
+
+Cada módulo deve ser completamente desacoplado.
+
+Aplicar princípios:
+
+DDD
+
+SOLID
+
+Clean Architecture
+
+CQRS
+
+Event Driven
+
+Repository Pattern
+
+Factory
+
+Dependency Injection
+
+=========================
+DOCUMENTAÇÃO
+=========================
+
+Antes de escrever qualquer código:
+
+1) Elaborar toda arquitetura.
+
+2) Criar diagrama completo.
+
+3) Criar estrutura de pastas.
+
+4) Criar modelagem do banco.
+
+5) Criar arquitetura dos microserviços.
+
+6) Criar especificação das APIs.
+
+7) Criar backlog.
+
+8) Criar roadmap.
+
+9) Criar documentação técnica.
+
+10) Somente depois iniciar a implementação.
+
+Nunca pule etapas.
+
+Sempre entregue código de qualidade Enterprise, escalável, seguro, documentado e preparado para milhares de empresas e milhões de dispositivos monitorados.

@@ -1,10 +1,11 @@
-# [Project name]
+# NexSupport AI
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Enterprise SaaS platform for IT support management — manages devices, tickets, alerts, AI diagnostics, and automation workflows across multi-tenant organizations.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/api-server run dev` — run the API server (port 8080, proxied at `/api`)
+- `pnpm --filter @workspace/nexsupport run dev` — run the frontend (proxied at `/`)
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
@@ -14,6 +15,7 @@ _Replace the heading above with the project's name, and this line with one sente
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
+- Frontend: React + Vite, TanStack Query, Recharts, Framer Motion, Wouter, shadcn/ui
 - API: Express 5
 - DB: PostgreSQL + Drizzle ORM
 - Validation: Zod (`zod/v4`), `drizzle-zod`
@@ -22,23 +24,41 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `lib/api-spec/openapi.yaml` — single source of truth for API contracts
+- `lib/db/src/schema/` — Drizzle table definitions (devices, tickets, alerts, scripts, automations, users, activity)
+- `artifacts/api-server/src/routes/` — Express route handlers (dashboard, devices, tickets, alerts, ai, automations, users)
+- `artifacts/nexsupport/src/` — React frontend (pages, components, hooks)
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- OpenAPI-first: all API contracts in YAML, codegen generates React Query hooks + Zod schemas
+- Modular routes: each domain (devices, tickets, alerts, AI, automations) is a separate router file
+- AI assistant uses pattern-matching responses for common IT scenarios; ready for OpenAI/Ollama integration
+- Dashboard endpoints compute aggregates server-side, not in the frontend
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+NexSupport AI is a control-room style IT management platform targeting MSPs and enterprise IT teams. Core modules:
+- **Executive Dashboard** — uptime, SLA compliance, ticket trends, device health
+- **Technical Dashboard** — per-device metrics, alert breakdown, performance charts
+- **Device Inventory** — filterable asset table with real-time status, metrics per device, AI diagnosis
+- **Help Desk** — ticket management with SLA tracking, comments, priority/status workflow
+- **Alerts Center** — live alert feed by severity, acknowledge/resolve actions
+- **AI Assistant** — chat-based IT support expert with script suggestions and device diagnosis
+- **Script Library** — PowerShell, Bash, Python, CMD scripts with language filter and search
+- **Automations** — workflow triggers (alert, schedule, device_offline, ticket_created, manual)
+- **Settings** — user management
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+_None set yet._
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- `ticket_comments.is_internal` was originally created as `text`; manually migrated to `boolean` via `ALTER TABLE ... USING (is_internal = 'true')`. The Drizzle schema now correctly declares it as `boolean`.
+- Enum types (device_type, device_status, ticket_status, ticket_priority, alert_severity, alert_status, script_language, automation_trigger, user_role, activity_type) are all PostgreSQL native enums — adding new values requires `ALTER TYPE ... ADD VALUE`.
+- API response schemas use `AiReply` (not `AiChatResponse`) to avoid Orval naming collision with the operation body Zod schema.
+- The `search` query param for `GET /devices`, `GET /tickets`, `GET /ai/scripts` uses `ILIKE` — case-insensitive.
 
 ## Pointers
 
