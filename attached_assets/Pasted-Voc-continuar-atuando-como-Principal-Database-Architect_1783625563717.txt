@@ -1,0 +1,696 @@
+Você continuará atuando como Principal Database Architect, Enterprise Solution Architect e Especialista em PostgreSQL.
+
+Os Prompts 01 e 02 já definiram a visão do produto e a arquitetura de microserviços.
+
+Agora sua missão é projetar TODA a camada de dados da plataforma NexSupport AI.
+
+NÃO escreva código de implementação da aplicação.
+
+Nesta etapa, produza apenas a arquitetura completa do banco de dados e seus relacionamentos.
+
+====================================================
+OBJETIVO
+====================================================
+
+Projetar um banco de dados Enterprise para suportar:
+
+• Plataforma SaaS Multi-Tenant
+• Milhões de dispositivos
+• Milhões de eventos
+• Bilhões de métricas históricas
+• Inventário completo
+• Monitoramento em tempo real
+• Help Desk
+• Automação
+• IA
+• RAG
+• Controle remoto
+• Licenciamento
+• Gestão financeira
+• API pública
+• Marketplace
+• Auditoria
+
+Toda modelagem deverá seguir boas práticas de PostgreSQL e alta escalabilidade.
+
+====================================================
+TECNOLOGIAS
+====================================================
+
+Utilizar:
+
+PostgreSQL 17
+
+TimescaleDB
+
+pgvector
+
+Redis
+
+MinIO
+
+RabbitMQ
+
+====================================================
+PADRÕES
+====================================================
+
+Aplicar:
+
+3FN
+
+UUID
+
+Soft Delete
+
+CreatedAt
+
+UpdatedAt
+
+DeletedAt
+
+Auditoria
+
+Versionamento
+
+RLS
+
+Multi Tenant
+
+Índices inteligentes
+
+Foreign Keys
+
+Constraints
+
+Views
+
+Materialized Views
+
+Triggers (somente quando necessário)
+
+====================================================
+ESTRUTURA MULTI-TENANT
+====================================================
+
+Projetar isolamento completo por Tenant.
+
+Criar entidades para:
+
+Tenant
+
+Empresa
+
+Filiais
+
+Departamentos
+
+Locais
+
+Usuários
+
+Papéis
+
+Permissões
+
+Grupos
+
+Equipes
+
+Clientes
+
+Técnicos
+
+====================================================
+GESTÃO DE ATIVOS
+====================================================
+
+Projetar entidades para:
+
+Dispositivos
+
+Categorias
+
+Fabricantes
+
+Modelos
+
+Hardware
+
+Componentes
+
+CPU
+
+GPU
+
+RAM
+
+Slots
+
+Discos
+
+SMART
+
+Placas
+
+BIOS
+
+UEFI
+
+TPM
+
+Monitores
+
+Baterias
+
+Fontes
+
+Interfaces de Rede
+
+Adaptadores Wi-Fi
+
+Dock Stations
+
+Periféricos
+
+USB
+
+Serial Numbers
+
+Garantias
+
+Patrimônio
+
+Localização
+
+Histórico de movimentação
+
+====================================================
+SOFTWARE INVENTORY
+====================================================
+
+Projetar:
+
+Softwares
+
+Versões
+
+Fabricantes
+
+Licenças
+
+Chaves
+
+Instalações
+
+Atualizações
+
+Histórico
+
+Utilização
+
+Compliance
+
+Office
+
+Adobe
+
+ERP
+
+Antivírus
+
+====================================================
+MONITORAMENTO
+====================================================
+
+Projetar entidades para:
+
+CPU Metrics
+
+Memory Metrics
+
+Disk Metrics
+
+Temperature Metrics
+
+Network Metrics
+
+Power Metrics
+
+Battery Metrics
+
+GPU Metrics
+
+Services
+
+Processes
+
+Performance Counters
+
+Windows Events
+
+Linux Logs
+
+BSOD
+
+SMART Alerts
+
+Health Score
+
+====================================================
+TIMESCALEDB
+====================================================
+
+Definir HyperTables para:
+
+CPU
+
+RAM
+
+Disco
+
+Rede
+
+Temperaturas
+
+Processos
+
+Serviços
+
+SNMP
+
+Impressoras
+
+Alertas
+
+Definir políticas de retenção, compressão e agregação contínua.
+
+====================================================
+NETWORK DISCOVERY
+====================================================
+
+Projetar:
+
+Sub-redes
+
+Hosts
+
+IPs
+
+MAC
+
+DNS
+
+Gateway
+
+Switches
+
+Portas
+
+ARP
+
+SNMP
+
+LLDP
+
+VLANs
+
+Interfaces
+
+Topologia
+
+====================================================
+IMPRESSORAS
+====================================================
+
+Projetar entidades para:
+
+Modelo
+
+Fabricante
+
+Firmware
+
+SNMP
+
+Contadores
+
+Toners
+
+Drum
+
+Fusor
+
+Kit
+
+Bandejas
+
+Alertas
+
+Fila
+
+Consumíveis
+
+Histórico
+
+====================================================
+HELP DESK
+====================================================
+
+Projetar:
+
+Chamados
+
+Categorias
+
+Prioridades
+
+Status
+
+SLA
+
+Comentários
+
+Anexos
+
+Checklist
+
+Tempo
+
+Custos
+
+Aprovações
+
+====================================================
+AUTOMAÇÃO
+====================================================
+
+Projetar:
+
+Workflows
+
+Triggers
+
+Condições
+
+Ações
+
+Scripts
+
+Execuções
+
+Histórico
+
+====================================================
+SCRIPT LIBRARY
+====================================================
+
+Projetar biblioteca para:
+
+PowerShell
+
+CMD
+
+Batch
+
+Bash
+
+Python
+
+SQL
+
+Cada script deverá possuir:
+
+Categoria
+
+Sistema Operacional
+
+Descrição
+
+Tags
+
+Versão
+
+Autor
+
+Validação
+
+Assinatura
+
+====================================================
+BASE DE CONHECIMENTO
+====================================================
+
+Projetar:
+
+Artigos
+
+Categorias
+
+FAQ
+
+Procedimentos
+
+Fabricantes
+
+Produtos
+
+Versões
+
+Anexos
+
+Relacionamentos
+
+====================================================
+IA
+====================================================
+
+Projetar tabelas para:
+
+Conversas
+
+Sessões
+
+Prompts
+
+Respostas
+
+Embeddings
+
+Vetores
+
+Tokens
+
+Histórico
+
+Feedback
+
+Memória
+
+Contexto
+
+RAG
+
+====================================================
+NOTIFICAÇÕES
+====================================================
+
+Projetar:
+
+Email
+
+SMS
+
+Push
+
+Teams
+
+Slack
+
+Discord
+
+Webhook
+
+WhatsApp
+
+====================================================
+AUDITORIA
+====================================================
+
+Registrar:
+
+Login
+
+Logout
+
+Alterações
+
+Execuções
+
+Scripts
+
+Chamados
+
+Inventário
+
+Mudanças
+
+Configurações
+
+====================================================
+API
+====================================================
+
+Projetar tabelas para:
+
+API Keys
+
+OAuth Clients
+
+Tokens
+
+Scopes
+
+Rate Limits
+
+Logs
+
+====================================================
+RELACIONAMENTOS
+====================================================
+
+Gerar:
+
+Diagrama ER textual completo.
+
+Todas as Foreign Keys.
+
+Cardinalidade.
+
+Dependências.
+
+====================================================
+ÍNDICES
+====================================================
+
+Definir:
+
+Índices compostos
+
+GIN
+
+GiST
+
+BRIN
+
+Hash
+
+Full Text Search
+
+====================================================
+PGVECTOR
+====================================================
+
+Projetar armazenamento para:
+
+Embeddings
+
+Documentos
+
+Base técnica
+
+Fabricantes
+
+Logs
+
+Scripts
+
+Artigos
+
+Comandos
+
+Diagnósticos
+
+====================================================
+MATERIALIZED VIEWS
+====================================================
+
+Criar sugestões para:
+
+Dashboard Executivo
+
+Dashboard Técnico
+
+Inventário
+
+Licenciamento
+
+Performance
+
+Impressoras
+
+Alertas
+
+SLA
+
+====================================================
+SEGURANÇA
+====================================================
+
+Projetar:
+
+RLS
+
+Políticas
+
+Criptografia
+
+Mascaramento
+
+Auditoria
+
+LGPD
+
+====================================================
+BACKUP
+====================================================
+
+Definir:
+
+Snapshots
+
+PITR
+
+Replicação
+
+Alta disponibilidade
+
+Estratégia de recuperação
+
+====================================================
+ENTREGÁVEIS
+====================================================
+
+Produzir uma documentação completa contendo:
+
+1. Modelo lógico.
+2. Modelo físico.
+3. Lista completa das tabelas.
+4. Campos de cada tabela.
+5. Tipos de dados.
+6. Relacionamentos.
+7. Índices.
+8. Constraints.
+9. Estratégia de particionamento.
+10. Estratégia de retenção.
+11. Modelo TimescaleDB.
+12. Modelo pgvector.
+13. Estratégia de auditoria.
+14. Estratégia de segurança.
+15. Justificativa técnica de todas as decisões.
+
+IMPORTANTE
+
+Não implemente SQL nesta etapa.
+
+Toda a saída deverá ser uma documentação técnica Enterprise, que servirá como especificação oficial para o Prompt 04, onde será iniciada a implementação do banco de dados.
