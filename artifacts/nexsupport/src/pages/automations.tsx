@@ -43,15 +43,15 @@ export function Automations() {
 
   return (
     <div className="space-y-6 h-full flex flex-col">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-            <Workflow className="w-8 h-8 text-purple-500" />
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+            <Workflow className="w-7 h-7 sm:w-8 sm:h-8 text-purple-500" />
             {t("automations.title")}
           </h1>
           <p className="text-muted-foreground mt-1">{t("automations.subtitle")}</p>
         </div>
-        <Button className="bg-purple-600 text-white hover:bg-purple-700">
+        <Button className="bg-purple-600 text-white hover:bg-purple-700 w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           {t("automations.createRule")}
         </Button>

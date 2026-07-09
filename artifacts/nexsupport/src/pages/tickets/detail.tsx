@@ -100,24 +100,26 @@ export function TicketDetail() {
 
   return (
     <div className="space-y-6 h-full flex flex-col animate-in fade-in duration-500">
-      <div className="flex items-center gap-4">
-        <Link href="/tickets">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-        </Link>
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <span className="text-xl font-mono text-primary font-bold">TKT-{ticket.id.toString().padStart(4, '0')}</span>
-            <h1 className="text-2xl font-bold tracking-tight text-white">{ticket.title}</h1>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0 w-full">
+          <Link href="/tickets">
+            <Button variant="ghost" size="icon" className="rounded-full shrink-0">
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+          </Link>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="text-xl font-mono text-primary font-bold">TKT-{ticket.id.toString().padStart(4, '0')}</span>
+              <h1 className="text-2xl font-bold tracking-tight text-white break-words">{ticket.title}</h1>
+            </div>
+            <p className="text-muted-foreground text-sm mt-1">
+              {t("tickets.created")} {format(new Date(ticket.createdAt), "MMM d, yyyy HH:mm")} · {ticket.reporterName}
+            </p>
           </div>
-          <p className="text-muted-foreground text-sm mt-1">
-            {t("tickets.created")} {format(new Date(ticket.createdAt), "MMM d, yyyy HH:mm")} · {ticket.reporterName}
-          </p>
         </div>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center w-full sm:w-auto">
           <Select value={ticket.status} onValueChange={(val) => handleStatusChange(val as TicketStatus)}>
-            <SelectTrigger className="w-[160px] bg-card border-card-border">
+            <SelectTrigger className="w-full sm:w-[160px] bg-card border-card-border">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

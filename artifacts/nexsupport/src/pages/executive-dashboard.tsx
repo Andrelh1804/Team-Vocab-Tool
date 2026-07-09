@@ -93,7 +93,7 @@ export function ExecutiveDashboard() {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">{t("executive.title")}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{t("executive.title")}</h1>
           <p className="text-muted-foreground mt-1">{t("executive.subtitle")}</p>
         </div>
       </div>

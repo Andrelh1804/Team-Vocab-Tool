@@ -121,24 +121,24 @@ export function Alerts() {
         ) : null}
       </div>
 
-      <div className="flex items-center gap-2 pb-2 border-b border-border">
+      <div className="flex items-center gap-2 pb-2 border-b border-border overflow-x-auto -mx-1 px-1 [&::-webkit-scrollbar]:hidden">
         <Button
           variant={filter === 'active' ? 'default' : 'ghost'}
-          className={filter === 'active' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}
+          className={`shrink-0 ${filter === 'active' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
           onClick={() => setFilter('active')}
         >
           {t("alerts.active")}
         </Button>
         <Button
           variant={filter === 'acknowledged' ? 'default' : 'ghost'}
-          className={filter === 'acknowledged' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}
+          className={`shrink-0 ${filter === 'acknowledged' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
           onClick={() => setFilter('acknowledged')}
         >
           {t("alerts.acknowledged")}
         </Button>
         <Button
           variant={filter === 'resolved' ? 'default' : 'ghost'}
-          className={filter === 'resolved' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}
+          className={`shrink-0 ${filter === 'resolved' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
           onClick={() => setFilter('resolved')}
         >
           {t("alerts.resolved")}
@@ -156,28 +156,30 @@ export function Alerts() {
           alerts?.map((alert) => (
             <div
               key={alert.id}
-              className={`flex items-start gap-4 p-4 rounded-lg border bg-card transition-colors ${
+              className={`flex flex-col sm:flex-row items-start gap-4 p-4 rounded-lg border bg-card transition-colors ${
                 alert.severity === 'critical' && alert.status === 'active'
                   ? 'border-destructive/50 bg-destructive/5'
                   : 'border-card-border hover:border-primary/30'
               }`}
             >
-              <div className="mt-1">
-                <SeverityIcon severity={alert.severity} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-medium text-white truncate">{alert.title}</h3>
-                  <SeverityBadge severity={alert.severity} />
+              <div className="flex items-start gap-4 flex-1 min-w-0 w-full">
+                <div className="mt-1 shrink-0">
+                  <SeverityIcon severity={alert.severity} />
                 </div>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{alert.message}</p>
-                <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
-                  <span>{t("alerts.source")} {alert.source}</span>
-                  {alert.deviceName && <span>Device: <span className="text-white/70">{alert.deviceName}</span></span>}
-                  <span>{formatDistanceToNow(new Date(alert.createdAt), { addSuffix: true, locale: dateLocale })}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <h3 className="font-medium text-white break-words">{alert.title}</h3>
+                    <SeverityBadge severity={alert.severity} />
+                  </div>
+                  <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{alert.message}</p>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono text-muted-foreground">
+                    <span>{t("alerts.source")} {alert.source}</span>
+                    {alert.deviceName && <span>Device: <span className="text-white/70">{alert.deviceName}</span></span>}
+                    <span>{formatDistanceToNow(new Date(alert.createdAt), { addSuffix: true, locale: dateLocale })}</span>
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-2 shrink-0">
+              <div className="flex flex-row sm:flex-col gap-2 shrink-0 w-full sm:w-auto">
                 {alert.status === 'active' && (
                   <Button
                     size="sm"

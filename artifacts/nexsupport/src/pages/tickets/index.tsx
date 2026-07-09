@@ -45,19 +45,19 @@ export function TicketsList() {
 
   return (
     <div className="space-y-6 h-full flex flex-col">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">{t("tickets.title")}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{t("tickets.title")}</h1>
           <p className="text-muted-foreground mt-1">{t("tickets.subtitle")}</p>
         </div>
-        <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+        <Button className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
           <TicketIcon className="w-4 h-4 mr-2" />
           {t("tickets.newTicket")}
         </Button>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+        <div className="relative flex-1 sm:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder={t("tickets.searchPlaceholder")}

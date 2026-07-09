@@ -38,22 +38,22 @@ export function ScriptsLibrary() {
 
   return (
     <div className="space-y-6 h-full flex flex-col">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-            <TerminalSquare className="w-8 h-8 text-primary" />
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+            <TerminalSquare className="w-7 h-7 sm:w-8 sm:h-8 text-primary" />
             {t("scripts.title")}
           </h1>
           <p className="text-muted-foreground mt-1">{t("scripts.subtitle")}</p>
         </div>
-        <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+        <Button className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
           <Code2 className="w-4 h-4 mr-2" />
           {t("scripts.newScript")}
         </Button>
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
+        <div className="relative flex-1 sm:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder={t("scripts.searchPlaceholder")}
@@ -92,7 +92,7 @@ export function ScriptsLibrary() {
                 <div className="bg-[#09090b] p-4 flex-1 overflow-y-auto max-h-[200px] font-mono text-sm text-green-400 whitespace-pre-wrap">
                   {script.content}
                 </div>
-                <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-[#09090b] to-transparent flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-[#09090b] to-transparent flex justify-end gap-2 opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
                   <Button size="sm" variant="outline" className="h-8 bg-background/80 backdrop-blur" onClick={() => handleCopy(script.content)}>
                     <Copy className="w-3.5 h-3.5 mr-2" />
                     {t("scripts.copy")}

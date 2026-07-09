@@ -76,20 +76,20 @@ export function Settings() {
                   <div className="text-muted-foreground">{t("settings.loadingUsers")}</div>
                 ) : (
                   users?.map(user => (
-                    <div key={user.id} className="flex items-center justify-between p-4 border border-border rounded-lg bg-background">
-                      <div className="flex items-center gap-4">
-                        <Avatar>
+                    <div key={user.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border border-border rounded-lg bg-background">
+                      <div className="flex items-center gap-4 min-w-0">
+                        <Avatar className="shrink-0">
                           <AvatarImage src={user.avatar || undefined} />
                           <AvatarFallback className="bg-primary/20 text-primary">
                             {user.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
-                          <p className="font-medium text-white">{user.name}</p>
-                          <p className="text-sm text-muted-foreground font-mono">{user.email}</p>
+                        <div className="min-w-0">
+                          <p className="font-medium text-white truncate">{user.name}</p>
+                          <p className="text-sm text-muted-foreground font-mono truncate">{user.email}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4 shrink-0">
                         <RoleBadge role={user.role} />
                         <Switch checked={user.isActive} />
                       </div>

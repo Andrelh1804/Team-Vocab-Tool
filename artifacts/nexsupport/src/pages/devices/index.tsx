@@ -63,19 +63,19 @@ export function DevicesList() {
 
   return (
     <div className="space-y-6 h-full flex flex-col">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">{t("devices.title")}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{t("devices.title")}</h1>
           <p className="text-muted-foreground mt-1">{t("devices.subtitle")}</p>
         </div>
-        <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+        <Button className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           {t("devices.addDevice")}
         </Button>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+        <div className="relative flex-1 sm:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder={t("devices.searchPlaceholder")}
@@ -151,7 +151,7 @@ export function DevicesList() {
                       {device.lastSeen ? formatDistanceToNow(new Date(device.lastSeen), { addSuffix: true, locale: dateLocale }) : t("common.never")}
                     </Cell>
                     <Cell>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 transition-opacity">
                         <MoreHorizontal className="w-4 h-4" />
                       </Button>
                     </Cell>

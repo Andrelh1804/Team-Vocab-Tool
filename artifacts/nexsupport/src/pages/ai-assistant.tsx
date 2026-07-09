@@ -85,8 +85,8 @@ export function AiAssistant() {
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)] animate-in fade-in duration-500">
       <div className="mb-4">
-        <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-          <Sparkles className="w-8 h-8 text-secondary" />
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+          <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 text-secondary" />
           {t("ai.title")}
         </h1>
         <p className="text-muted-foreground mt-1">{t("ai.subtitle")}</p>

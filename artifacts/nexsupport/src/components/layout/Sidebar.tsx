@@ -14,7 +14,11 @@ import {
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
-export function Sidebar() {
+interface SidebarProps {
+  onNavigate?: () => void;
+}
+
+export function Sidebar({ onNavigate }: SidebarProps = {}) {
   const [location] = useLocation();
   const { t } = useTranslation();
 
@@ -31,7 +35,7 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="w-64 flex flex-col h-full bg-sidebar border-r border-sidebar-border">
+    <div className="w-full flex flex-col h-full bg-sidebar border-r border-sidebar-border">
       <div className="p-6">
         <div className="flex items-center gap-2 text-primary">
           <Cpu className="w-8 h-8" />
@@ -43,7 +47,7 @@ export function Sidebar() {
         {NAV_ITEMS.map((item) => {
           const isActive = location === item.href || (item.href !== "/" && item.href !== "/technical" && location.startsWith(item.href));
           return (
-            <Link key={item.href} href={item.href}>
+            <Link key={item.href} href={item.href} onClick={onNavigate}>
               <div
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors cursor-pointer",
