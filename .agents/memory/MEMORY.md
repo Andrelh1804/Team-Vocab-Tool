@@ -1,0 +1,1 @@
+- [i18n setup](i18n-setup.md) — react-i18next with EN/PT, language persisted in localStorage key "nexsupport-lang", date-fns ptBR locale used in all relative date calls.

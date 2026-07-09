@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { useListDevices, DeviceStatus, DeviceType } from "@workspace/api-client-react";
+import { useListDevices } from "@workspace/api-client-react";
 import { Link } from "wouter";
-import { 
-  Search, 
-  Filter, 
-  MoreHorizontal, 
-  Plus, 
+import {
+  Search,
+  Filter,
+  MoreHorizontal,
+  Plus,
   Laptop,
   Server,
   Router,
   Wifi,
   Printer,
   Shield,
-  Monitor
+  Monitor,
+  HardDrive
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,8 @@ import {
   Row,
 } from "@/components/ui/table";
 import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 const TypeIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -43,36 +46,39 @@ const TypeIcon = ({ type }: { type: string }) => {
 };
 
 const StatusBadge = ({ status }: { status: string }) => {
+  const { t } = useTranslation();
   switch (status) {
-    case 'online': return <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">Online</Badge>;
-    case 'offline': return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">Offline</Badge>;
-    case 'warning': return <Badge variant="outline" className="bg-secondary/10 text-secondary border-secondary/20">Warning</Badge>;
-    default: return <Badge variant="outline" className="bg-muted text-muted-foreground">Unknown</Badge>;
+    case 'online': return <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">{t("common.online")}</Badge>;
+    case 'offline': return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">{t("common.offline")}</Badge>;
+    case 'warning': return <Badge variant="outline" className="bg-secondary/10 text-secondary border-secondary/20">{t("common.warning")}</Badge>;
+    default: return <Badge variant="outline" className="bg-muted text-muted-foreground">{t("common.unknown")}</Badge>;
   }
 };
 
 export function DevicesList() {
   const [search, setSearch] = useState("");
   const { data: devices, isLoading } = useListDevices({ search: search || undefined });
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === "pt" ? ptBR : undefined;
 
   return (
     <div className="space-y-6 h-full flex flex-col">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Device Inventory</h1>
-          <p className="text-muted-foreground mt-1">Manage and monitor all connected assets</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white">{t("devices.title")}</h1>
+          <p className="text-muted-foreground mt-1">{t("devices.subtitle")}</p>
         </div>
         <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
           <Plus className="w-4 h-4 mr-2" />
-          Add Device
+          {t("devices.addDevice")}
         </Button>
       </div>
 
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search hostname, IP, or user..." 
+          <Input
+            placeholder={t("devices.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9 bg-card border-card-border"
@@ -80,7 +86,7 @@ export function DevicesList() {
         </div>
         <Button variant="outline" className="border-card-border bg-card">
           <Filter className="w-4 h-4 mr-2" />
-          Filters
+          {t("common.filters")}
         </Button>
       </div>
 
@@ -89,12 +95,12 @@ export function DevicesList() {
           <Table>
             <Header>
               <Row className="border-card-border hover:bg-transparent">
-                <Head>Hostname / Name</Head>
-                <Head>Status</Head>
-                <Head>IP Address</Head>
-                <Head>OS</Head>
-                <Head>User</Head>
-                <Head>Last Seen</Head>
+                <Head>{t("devices.hostname")}</Head>
+                <Head>{t("devices.status")}</Head>
+                <Head>{t("devices.ipAddress")}</Head>
+                <Head>{t("devices.os")}</Head>
+                <Head>{t("devices.user")}</Head>
+                <Head>{t("devices.lastSeen")}</Head>
                 <Head className="w-[50px]"></Head>
               </Row>
             </Header>
@@ -114,7 +120,7 @@ export function DevicesList() {
               ) : devices?.length === 0 ? (
                 <Row>
                   <Cell colSpan={7} className="h-32 text-center text-muted-foreground">
-                    No devices found matching your criteria.
+                    {t("devices.noDevices")}
                   </Cell>
                 </Row>
               ) : (
@@ -142,7 +148,7 @@ export function DevicesList() {
                       {device.assignedUser || '-'}
                     </Cell>
                     <Cell className="text-sm text-muted-foreground whitespace-nowrap">
-                      {device.lastSeen ? formatDistanceToNow(new Date(device.lastSeen), { addSuffix: true }) : 'Never'}
+                      {device.lastSeen ? formatDistanceToNow(new Date(device.lastSeen), { addSuffix: true, locale: dateLocale }) : t("common.never")}
                     </Cell>
                     <Cell>
                       <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -159,6 +165,3 @@ export function DevicesList() {
     </div>
   );
 }
-
-// Needed missing import
-import { HardDrive } from "lucide-react";

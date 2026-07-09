@@ -1,32 +1,34 @@
 import { Link, useLocation } from "wouter";
-import { 
-  Activity, 
-  AlertTriangle, 
-  Bot, 
-  Cpu, 
-  HardDrive, 
-  LayoutDashboard, 
-  Settings, 
-  TerminalSquare, 
-  TicketCheck, 
+import {
+  Activity,
+  AlertTriangle,
+  Bot,
+  Cpu,
+  HardDrive,
+  LayoutDashboard,
+  Settings,
+  TerminalSquare,
+  TicketCheck,
   Workflow
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const NAV_ITEMS = [
-  { href: "/", label: "Executive", icon: LayoutDashboard },
-  { href: "/technical", label: "Technical", icon: Activity },
-  { href: "/devices", label: "Devices", icon: HardDrive },
-  { href: "/tickets", label: "Tickets", icon: TicketCheck },
-  { href: "/alerts", label: "Alerts", icon: AlertTriangle },
-  { href: "/ai", label: "AI Assistant", icon: Bot },
-  { href: "/scripts", label: "Scripts", icon: TerminalSquare },
-  { href: "/automations", label: "Automations", icon: Workflow },
-  { href: "/settings", label: "Settings", icon: Settings },
-];
+import { useTranslation } from "react-i18next";
 
 export function Sidebar() {
   const [location] = useLocation();
+  const { t } = useTranslation();
+
+  const NAV_ITEMS = [
+    { href: "/", label: t("nav.executive"), icon: LayoutDashboard },
+    { href: "/technical", label: t("nav.technical"), icon: Activity },
+    { href: "/devices", label: t("nav.devices"), icon: HardDrive },
+    { href: "/tickets", label: t("nav.tickets"), icon: TicketCheck },
+    { href: "/alerts", label: t("nav.alerts"), icon: AlertTriangle },
+    { href: "/ai", label: t("nav.aiAssistant"), icon: Bot },
+    { href: "/scripts", label: t("nav.scripts"), icon: TerminalSquare },
+    { href: "/automations", label: t("nav.automations"), icon: Workflow },
+    { href: "/settings", label: t("nav.settings"), icon: Settings },
+  ];
 
   return (
     <div className="w-64 flex flex-col h-full bg-sidebar border-r border-sidebar-border">
@@ -36,7 +38,7 @@ export function Sidebar() {
           <h1 className="font-bold text-xl tracking-tight text-white">NexSupport<span className="text-primary">AI</span></h1>
         </div>
       </div>
-      
+
       <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
         {NAV_ITEMS.map((item) => {
           const isActive = location === item.href || (item.href !== "/" && item.href !== "/technical" && location.startsWith(item.href));
@@ -45,8 +47,8 @@ export function Sidebar() {
               <div
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors cursor-pointer",
-                  isActive 
-                    ? "bg-primary/10 text-primary" 
+                  isActive
+                    ? "bg-primary/10 text-primary"
                     : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
                 )}
               >
@@ -67,8 +69,8 @@ export function Sidebar() {
             OP
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-medium text-sidebar-foreground">Operator</span>
-            <span className="text-xs text-sidebar-foreground/50">Admin</span>
+            <span className="text-sm font-medium text-sidebar-foreground">{t("common.operator")}</span>
+            <span className="text-xs text-sidebar-foreground/50">{t("common.admin")}</span>
           </div>
         </div>
       </div>

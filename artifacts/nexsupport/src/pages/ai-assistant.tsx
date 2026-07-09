@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useAiChat, AiReply } from "@workspace/api-client-react";
-import { 
-  Bot, 
-  Send, 
-  User, 
-  TerminalSquare, 
+import { useAiChat } from "@workspace/api-client-react";
+import {
+  Bot,
+  Send,
+  User,
+  TerminalSquare,
   Loader2,
   Sparkles
 } from "lucide-react";
@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from "react-markdown";
+import { useTranslation } from "react-i18next";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -22,21 +23,23 @@ interface Message {
 }
 
 export function AiAssistant() {
+  const { t } = useTranslation();
+
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Hello Operator. I am NexSupport AI, your infrastructure copilot. I can analyze logs, suggest PowerShell scripts, diagnose device issues, or query your active tickets. How can I assist you today?",
+      content: t("ai.greeting"),
       suggestions: [
-        "What are the top memory-hogging devices?",
-        "Write a PowerShell script to restart spooler",
-        "Summarize active critical alerts"
+        t("ai.suggestions.memoryDevices"),
+        t("ai.suggestions.restartSpooler"),
+        t("ai.suggestions.criticalAlerts"),
       ]
     }
   ]);
-  
+
   const bottomRef = useRef<HTMLDivElement>(null);
-  
+
   const chatMutation = useAiChat({
     mutation: {
       onSuccess: (reply) => {
@@ -54,12 +57,26 @@ export function AiAssistant() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, chatMutation.isPending]);
 
+  // Update greeting when language changes
+  useEffect(() => {
+    setMessages([{
+      role: 'assistant',
+      content: t("ai.greeting"),
+      suggestions: [
+        t("ai.suggestions.memoryDevices"),
+        t("ai.suggestions.restartSpooler"),
+        t("ai.suggestions.criticalAlerts"),
+      ]
+    }]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t]);
+
   const handleSend = (text: string = input) => {
     if (!text.trim() || chatMutation.isPending) return;
-    
+
     setMessages(prev => [...prev, { role: 'user', content: text }]);
     setInput("");
-    
+
     chatMutation.mutate({
       data: { message: text }
     });
@@ -70,9 +87,9 @@ export function AiAssistant() {
       <div className="mb-4">
         <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
           <Sparkles className="w-8 h-8 text-secondary" />
-          NexSupport AI
+          {t("ai.title")}
         </h1>
-        <p className="text-muted-foreground mt-1">L2 Support Copilot</p>
+        <p className="text-muted-foreground mt-1">{t("ai.subtitle")}</p>
       </div>
 
       <Card className="flex-1 border-card-border bg-card overflow-hidden flex flex-col shadow-2xl">
@@ -84,11 +101,11 @@ export function AiAssistant() {
               }`}>
                 {msg.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
               </div>
-              
+
               <div className="flex flex-col gap-2">
                 <div className={`rounded-xl p-4 ${
-                  msg.role === 'user' 
-                    ? 'bg-primary text-primary-foreground rounded-tr-sm' 
+                  msg.role === 'user'
+                    ? 'bg-primary text-primary-foreground rounded-tr-sm'
                     : 'bg-background border border-border text-foreground rounded-tl-sm'
                 }`}>
                   <div className="prose prose-sm dark:prose-invert max-w-none text-white/90">
@@ -106,7 +123,7 @@ export function AiAssistant() {
                             {script.language}
                           </span>
                           <Button size="sm" variant="ghost" className="h-6 text-xs text-primary hover:text-primary-foreground hover:bg-primary">
-                            Run Script
+                            {t("ai.runScript")}
                           </Button>
                         </div>
                         <pre className="p-3 text-sm font-mono text-green-400 overflow-x-auto whitespace-pre-wrap">
@@ -120,9 +137,9 @@ export function AiAssistant() {
                 {msg.suggestions && msg.suggestions.length > 0 && idx === messages.length - 1 && (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {msg.suggestions.map((sug, i) => (
-                      <Badge 
-                        key={i} 
-                        variant="outline" 
+                      <Badge
+                        key={i}
+                        variant="outline"
                         className="bg-card cursor-pointer hover:bg-primary/10 hover:text-primary transition-colors py-1.5"
                         onClick={() => handleSend(sug)}
                       >
@@ -134,7 +151,7 @@ export function AiAssistant() {
               </div>
             </div>
           ))}
-          
+
           {chatMutation.isPending && (
             <div className="flex gap-4 max-w-[80%]">
               <div className="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center shrink-0">
@@ -142,17 +159,17 @@ export function AiAssistant() {
               </div>
               <div className="bg-background border border-border rounded-xl rounded-tl-sm p-4 flex items-center gap-2">
                 <Loader2 className="w-4 h-4 text-secondary animate-spin" />
-                <span className="text-sm text-muted-foreground animate-pulse">Analyzing infrastructure...</span>
+                <span className="text-sm text-muted-foreground animate-pulse">{t("ai.analyzing")}</span>
               </div>
             </div>
           )}
           <div ref={bottomRef} />
         </CardContent>
-        
+
         <div className="p-4 border-t border-card-border bg-background/50">
           <div className="relative flex items-center">
             <Textarea
-              placeholder="Ask about a device, ticket, or request a script..."
+              placeholder={t("ai.inputPlaceholder")}
               className="min-h-[52px] h-[52px] resize-none pr-12 py-3 bg-[#0a0a0a] border-card-border focus-visible:ring-secondary/50 rounded-xl"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -163,7 +180,7 @@ export function AiAssistant() {
                 }
               }}
             />
-            <Button 
+            <Button
               size="icon"
               className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-lg shadow-[0_0_15px_rgba(255,176,0,0.2)]"
               disabled={!input.trim() || chatMutation.isPending}
@@ -173,7 +190,7 @@ export function AiAssistant() {
             </Button>
           </div>
           <div className="text-center mt-2">
-            <span className="text-[10px] text-muted-foreground font-mono">NexSupport AI can make mistakes. Verify scripts before execution.</span>
+            <span className="text-[10px] text-muted-foreground font-mono">{t("ai.disclaimer")}</span>
           </div>
         </div>
       </Card>

@@ -1,41 +1,38 @@
 import React from "react";
 import { useGetExecutiveDashboard } from "@workspace/api-client-react";
-import { 
-  Activity, 
-  AlertTriangle, 
-  CheckCircle2, 
+import {
+  Activity,
+  CheckCircle2,
   HardDrive,
-  Ticket,
-  TrendingUp,
   ShieldAlert
 } from "lucide-react";
-import { 
-  Area, 
-  AreaChart, 
-  Bar, 
-  BarChart, 
-  CartesianGrid, 
-  Cell, 
-  Pie, 
-  PieChart, 
-  ResponsiveContainer, 
-  Tooltip, 
-  XAxis, 
-  YAxis 
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslation } from "react-i18next";
 
 export function ExecutiveDashboard() {
   const { data: dashboard, isLoading } = useGetExecutiveDashboard();
+  const { t } = useTranslation();
 
   if (isLoading || !dashboard) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Executive Overview</h1>
-            <p className="text-muted-foreground mt-1">Platform health and operational metrics</p>
+            <h1 className="text-3xl font-bold tracking-tight text-white">{t("executive.title")}</h1>
+            <p className="text-muted-foreground mt-1">{t("executive.subtitle")}</p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -53,44 +50,42 @@ export function ExecutiveDashboard() {
     totalDevices,
     onlineDevices,
     offlineDevices,
-    openTickets,
     resolvedThisWeek,
     criticalAlerts,
     uptimePercent,
     slaCompliancePercent,
     devicesByType,
-    ticketsByPriority,
     weeklyTicketTrend
   } = dashboard;
 
   const kpis = [
     {
-      title: "Platform Uptime",
+      title: t("executive.platformUptime"),
       value: `${uptimePercent}%`,
       icon: Activity,
       color: "text-primary",
-      desc: "Last 30 days"
+      desc: t("executive.last30Days")
     },
     {
-      title: "Online Devices",
+      title: t("executive.onlineDevices"),
       value: `${onlineDevices} / ${totalDevices}`,
       icon: HardDrive,
       color: "text-secondary",
-      desc: `${offlineDevices} offline`
+      desc: `${offlineDevices} ${t("executive.offline")}`
     },
     {
-      title: "SLA Compliance",
+      title: t("executive.slaCompliance"),
       value: `${slaCompliancePercent}%`,
       icon: CheckCircle2,
       color: "text-green-500",
-      desc: `${resolvedThisWeek} resolved this week`
+      desc: `${resolvedThisWeek} ${t("executive.resolvedThisWeek")}`
     },
     {
-      title: "Critical Alerts",
+      title: t("executive.criticalAlerts"),
       value: criticalAlerts,
       icon: ShieldAlert,
       color: "text-destructive",
-      desc: "Require immediate action"
+      desc: t("executive.requireAction")
     }
   ];
 
@@ -98,8 +93,8 @@ export function ExecutiveDashboard() {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Executive Overview</h1>
-          <p className="text-muted-foreground mt-1">Platform health and operational metrics</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white">{t("executive.title")}</h1>
+          <p className="text-muted-foreground mt-1">{t("executive.subtitle")}</p>
         </div>
       </div>
 
@@ -125,8 +120,8 @@ export function ExecutiveDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="border-card-border bg-card/50 backdrop-blur flex flex-col">
           <CardHeader>
-            <CardTitle>Ticket Volume Trend</CardTitle>
-            <CardDescription>Tickets created vs resolved over last 7 days</CardDescription>
+            <CardTitle>{t("executive.ticketVolumeTrend")}</CardTitle>
+            <CardDescription>{t("executive.ticketVolumeDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="flex-1 min-h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -138,30 +133,30 @@ export function ExecutiveDashboard() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis 
-                  dataKey="label" 
-                  stroke="hsl(var(--muted-foreground))" 
-                  fontSize={12} 
-                  tickLine={false} 
+                <XAxis
+                  dataKey="label"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
                   axisLine={false}
                 />
-                <YAxis 
-                  stroke="hsl(var(--muted-foreground))" 
-                  fontSize={12} 
-                  tickLine={false} 
-                  axisLine={false} 
+                <YAxis
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
                 />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}
                   itemStyle={{ color: 'hsl(var(--foreground))' }}
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke="hsl(var(--primary))" 
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="hsl(var(--primary))"
                   strokeWidth={2}
-                  fillOpacity={1} 
-                  fill="url(#colorValue)" 
+                  fillOpacity={1}
+                  fill="url(#colorValue)"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -170,24 +165,24 @@ export function ExecutiveDashboard() {
 
         <Card className="border-card-border bg-card/50 backdrop-blur flex flex-col">
           <CardHeader>
-            <CardTitle>Devices by Type</CardTitle>
-            <CardDescription>Distribution of managed assets</CardDescription>
+            <CardTitle>{t("executive.devicesByType")}</CardTitle>
+            <CardDescription>{t("executive.devicesByTypeDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="flex-1 min-h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={devicesByType} layout="vertical" margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} />
                 <XAxis type="number" hide />
-                <YAxis 
-                  dataKey="name" 
-                  type="category" 
-                  stroke="hsl(var(--muted-foreground))" 
-                  fontSize={12} 
-                  tickLine={false} 
+                <YAxis
+                  dataKey="name"
+                  type="category"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
                   axisLine={false}
                   width={80}
                 />
-                <Tooltip 
+                <Tooltip
                   cursor={{ fill: 'hsl(var(--accent))' }}
                   contentStyle={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}
                 />

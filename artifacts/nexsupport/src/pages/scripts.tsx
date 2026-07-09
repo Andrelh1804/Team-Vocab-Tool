@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useListScripts } from "@workspace/api-client-react";
-import { 
-  TerminalSquare, 
-  Search, 
+import {
+  TerminalSquare,
+  Search,
   Code2,
   Sparkles,
   Play,
@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const LanguageBadge = ({ lang }: { lang: string }) => {
   switch (lang) {
@@ -28,10 +29,11 @@ export function ScriptsLibrary() {
   const [search, setSearch] = useState("");
   const { data: scripts, isLoading } = useListScripts({ search: search || undefined });
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast({ title: "Copied to clipboard" });
+    toast({ title: t("scripts.copiedToClipboard") });
   };
 
   return (
@@ -40,21 +42,21 @@ export function ScriptsLibrary() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
             <TerminalSquare className="w-8 h-8 text-primary" />
-            Script Library
+            {t("scripts.title")}
           </h1>
-          <p className="text-muted-foreground mt-1">Repository of automation and diagnostic scripts</p>
+          <p className="text-muted-foreground mt-1">{t("scripts.subtitle")}</p>
         </div>
         <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
           <Code2 className="w-4 h-4 mr-2" />
-          New Script
+          {t("scripts.newScript")}
         </Button>
       </div>
 
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search scripts by name or tags..." 
+          <Input
+            placeholder={t("scripts.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9 bg-card border-card-border"
@@ -67,7 +69,7 @@ export function ScriptsLibrary() {
           Array(6).fill(0).map((_, i) => <Skeleton key={i} className="h-64 bg-card rounded-xl" />)
         ) : scripts?.length === 0 ? (
           <div className="col-span-full h-64 flex items-center justify-center rounded-xl border border-dashed border-card-border">
-            <p className="text-muted-foreground">No scripts found.</p>
+            <p className="text-muted-foreground">{t("scripts.noScripts")}</p>
           </div>
         ) : (
           scripts?.map((script) => (
@@ -93,11 +95,11 @@ export function ScriptsLibrary() {
                 <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-[#09090b] to-transparent flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <Button size="sm" variant="outline" className="h-8 bg-background/80 backdrop-blur" onClick={() => handleCopy(script.content)}>
                     <Copy className="w-3.5 h-3.5 mr-2" />
-                    Copy
+                    {t("scripts.copy")}
                   </Button>
                   <Button size="sm" className="h-8 bg-primary text-primary-foreground hover:bg-primary/90">
                     <Play className="w-3.5 h-3.5 mr-2" />
-                    Run
+                    {t("scripts.run")}
                   </Button>
                 </div>
               </CardContent>

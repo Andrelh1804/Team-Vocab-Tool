@@ -1,0 +1,498 @@
+Você continuará atuando como Principal Software Architect da NexSupport AI.
+
+O Prompt 01 já definiu a visão estratégica do produto.
+
+Agora seu objetivo é projetar toda a arquitetura Enterprise antes da implementação.
+
+NÃO escreva código nesta etapa.
+
+Sua função é produzir uma especificação técnica completa que servirá como guia para todo o desenvolvimento.
+
+====================================================
+OBJETIVO
+====================================================
+
+Projetar uma arquitetura SaaS Multi-Tenant capaz de monitorar centenas de milhares de dispositivos simultaneamente.
+
+A arquitetura deverá suportar:
+
+• Empresas
+• MSPs
+• Departamentos de TI
+• Franquias
+• Governo
+• Grandes Corporações
+
+A plataforma deverá ser preparada para escalar horizontalmente.
+
+====================================================
+PADRÕES OBRIGATÓRIOS
+====================================================
+
+Toda arquitetura deverá utilizar:
+
+DDD
+
+Clean Architecture
+
+SOLID
+
+Hexagonal Architecture
+
+CQRS
+
+Repository Pattern
+
+Factory Pattern
+
+Dependency Injection
+
+Event Driven Architecture
+
+Saga Pattern
+
+Outbox Pattern
+
+Idempotência
+
+API First
+
+Contract First
+
+OpenAPI
+
+Versionamento
+
+Feature Flags
+
+Observabilidade nativa
+
+====================================================
+MICROSSERVIÇOS
+====================================================
+
+Defina todos os microserviços necessários.
+
+Exemplo:
+
+API Gateway
+
+Identity Service
+
+Tenant Service
+
+User Service
+
+Agent Service
+
+Inventory Service
+
+Hardware Service
+
+Software Inventory Service
+
+License Service
+
+Discovery Service
+
+Printer Monitoring Service
+
+SNMP Service
+
+Performance Service
+
+Alert Service
+
+Automation Service
+
+Script Library Service
+
+Knowledge Base Service
+
+AI Service
+
+RAG Service
+
+Embedding Service
+
+Notification Service
+
+Ticket Service
+
+Remote Access Service
+
+Reporting Service
+
+Dashboard Service
+
+Audit Service
+
+File Service
+
+Scheduler Service
+
+Webhook Service
+
+Integration Service
+
+Billing Service
+
+Subscription Service
+
+Marketplace Service
+
+Analytics Service
+
+Telemetry Service
+
+Configuration Service
+
+Secrets Service
+
+Update Service
+
+Cada serviço deverá possuir:
+
+• Responsabilidade única
+• Banco de dados adequado
+• APIs próprias
+• Eventos publicados
+• Eventos consumidos
+• Dependências
+• Escalabilidade
+• Estratégia de cache
+
+====================================================
+COMUNICAÇÃO ENTRE SERVIÇOS
+====================================================
+
+Defina quando utilizar:
+
+REST
+
+GraphQL
+
+WebSocket
+
+RabbitMQ
+
+Redis Streams
+
+Eventos assíncronos
+
+RPC
+
+Explique as vantagens de cada abordagem e em quais cenários serão utilizadas.
+
+====================================================
+BANCO DE DADOS
+====================================================
+
+Defina quais bancos serão utilizados.
+
+PostgreSQL
+
+TimescaleDB
+
+Redis
+
+pgvector
+
+MinIO
+
+Explique exatamente:
+
+• O que será armazenado em cada banco.
+• Estratégia de particionamento.
+• Índices.
+• Políticas de retenção.
+• Arquivamento.
+• Backup.
+• Alta disponibilidade.
+• Replicação.
+
+====================================================
+EVENTOS
+====================================================
+
+Defina todos os eventos publicados.
+
+Exemplos:
+
+DeviceDiscovered
+
+InventoryUpdated
+
+SoftwareInstalled
+
+SoftwareRemoved
+
+PrinterOffline
+
+PrinterOnline
+
+HighCPUDetected
+
+MemoryAlert
+
+DiskFailureDetected
+
+SmartFailureDetected
+
+AgentInstalled
+
+AgentOffline
+
+TicketCreated
+
+TicketClosed
+
+AutomationExecuted
+
+LicenseExpired
+
+UserCreated
+
+TenantCreated
+
+AIAnalysisCompleted
+
+NotificationSent
+
+Para cada evento informar:
+
+Nome
+
+Payload
+
+Quem publica
+
+Quem consome
+
+====================================================
+API GATEWAY
+====================================================
+
+Projetar:
+
+Rate Limit
+
+Autenticação
+
+JWT
+
+OAuth2
+
+OIDC
+
+API Keys
+
+Versionamento
+
+Logs
+
+Auditoria
+
+Balanceamento
+
+Compressão
+
+Cache
+
+====================================================
+SEGURANÇA
+====================================================
+
+Definir:
+
+RBAC
+
+ABAC
+
+Multi Tenant Isolation
+
+RLS
+
+Criptografia
+
+TLS
+
+Secrets
+
+Rotação de chaves
+
+Auditoria
+
+LGPD
+
+Proteção contra ataques
+
+OWASP Top 10
+
+====================================================
+OBSERVABILIDADE
+====================================================
+
+Projetar observabilidade completa utilizando:
+
+OpenTelemetry
+
+Prometheus
+
+Grafana
+
+Loki
+
+Tempo
+
+Jaeger
+
+Health Checks
+
+Readiness
+
+Liveness
+
+Tracing
+
+Logging
+
+Metrics
+
+====================================================
+ESCALABILIDADE
+====================================================
+
+Explicar como suportar:
+
+100 empresas
+
+1.000 empresas
+
+10.000 empresas
+
+100.000 empresas
+
+1 milhão de dispositivos
+
+Definir:
+
+Auto Scaling
+
+Load Balancer
+
+Cache
+
+Sharding
+
+Filas
+
+CDN
+
+Processamento assíncrono
+
+====================================================
+DEPLOY
+====================================================
+
+Projetar infraestrutura para:
+
+Docker
+
+Docker Compose
+
+Kubernetes
+
+Helm
+
+GitHub Actions
+
+Terraform
+
+Cloudflare
+
+AWS
+
+Azure
+
+Google Cloud
+
+DigitalOcean
+
+Hetzner
+
+Railway
+
+Render
+
+Supabase
+
+====================================================
+ESTRUTURA DO MONOREPO
+====================================================
+
+Definir uma estrutura organizada para um monorepositório utilizando Turborepo.
+
+Exemplo:
+
+apps/
+  web
+  admin
+  api-gateway
+  ai-service
+  inventory-service
+  monitoring-service
+  discovery-service
+  ticket-service
+  notification-service
+
+packages/
+  ui
+  config
+  auth
+  database
+  logger
+  telemetry
+  common
+  sdk
+
+agents/
+  windows-agent
+  linux-agent
+  macos-agent
+
+libs/
+  shared
+  protocols
+  events
+  contracts
+
+infra/
+  docker
+  kubernetes
+  terraform
+
+docs/
+
+====================================================
+ENTREGÁVEIS
+====================================================
+
+Gerar documentação contendo:
+
+1. Arquitetura Geral.
+2. Diagrama textual dos microserviços.
+3. Fluxo completo de comunicação.
+4. Justificativa técnica de cada tecnologia escolhida.
+5. Estrutura do monorepositório.
+6. Lista de microserviços.
+7. Fluxo dos eventos.
+8. Estratégia de escalabilidade.
+9. Estratégia de segurança.
+10. Roadmap técnico da arquitetura.
+
+IMPORTANTE
+
+Não implemente nenhum código.
+
+Toda a saída deverá ser uma documentação técnica detalhada que servirá como referência para todas as próximas etapas do desenvolvimento.

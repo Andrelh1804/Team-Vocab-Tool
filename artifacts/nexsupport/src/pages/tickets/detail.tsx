@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useParams, Link } from "wouter";
-import { 
-  useGetTicket, 
-  useListTicketComments, 
+import {
+  useGetTicket,
+  useListTicketComments,
   useAddTicketComment,
   useUpdateTicket,
   TicketStatus
 } from "@workspace/api-client-react";
-import { 
-  ArrowLeft, 
-  Send, 
-  Clock, 
-  User, 
+import {
+  ArrowLeft,
+  Send,
+  Clock,
+  User,
   MessageSquare,
   HardDrive,
   Bot
@@ -24,13 +24,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow, format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 const PriorityBadge = ({ priority }: { priority: string }) => {
+  const { t } = useTranslation();
   switch (priority) {
-    case 'critical': return <Badge variant="destructive">Critical</Badge>;
-    case 'high': return <Badge variant="outline" className="bg-secondary/10 text-secondary border-secondary/20">High</Badge>;
-    case 'medium': return <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">Medium</Badge>;
-    default: return <Badge variant="outline" className="bg-muted text-muted-foreground">Low</Badge>;
+    case 'critical': return <Badge variant="destructive">{t("common.critical")}</Badge>;
+    case 'high': return <Badge variant="outline" className="bg-secondary/10 text-secondary border-secondary/20">{t("common.high")}</Badge>;
+    case 'medium': return <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">{t("common.medium")}</Badge>;
+    default: return <Badge variant="outline" className="bg-muted text-muted-foreground">{t("common.low")}</Badge>;
   }
 };
 
@@ -39,11 +42,13 @@ export function TicketDetail() {
   const ticketId = parseInt(id || "0", 10);
   const queryClient = useQueryClient();
   const [commentText, setCommentText] = useState("");
-  
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === "pt" ? ptBR : undefined;
+
   const { data: ticket, isLoading: isTicketLoading } = useGetTicket(ticketId, {
     query: { enabled: !!ticketId, queryKey: ['ticket', ticketId] }
   });
-  
+
   const { data: comments, isLoading: isCommentsLoading } = useListTicketComments(ticketId, {
     query: { enabled: !!ticketId, queryKey: ['ticketComments', ticketId] }
   });
@@ -87,7 +92,7 @@ export function TicketDetail() {
       id: ticketId,
       data: {
         content: commentText,
-        authorName: "Operator",
+        authorName: t("common.operator"),
         isInternal: false
       }
     });
@@ -107,25 +112,25 @@ export function TicketDetail() {
             <h1 className="text-2xl font-bold tracking-tight text-white">{ticket.title}</h1>
           </div>
           <p className="text-muted-foreground text-sm mt-1">
-            Created {format(new Date(ticket.createdAt), "MMM d, yyyy HH:mm")} by {ticket.reporterName}
+            {t("tickets.created")} {format(new Date(ticket.createdAt), "MMM d, yyyy HH:mm")} · {ticket.reporterName}
           </p>
         </div>
         <div className="flex gap-3 items-center">
           <Select value={ticket.status} onValueChange={(val) => handleStatusChange(val as TicketStatus)}>
-            <SelectTrigger className="w-[140px] bg-card border-card-border">
+            <SelectTrigger className="w-[160px] bg-card border-card-border">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="open">Open</SelectItem>
-              <SelectItem value="in_progress">In Progress</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="resolved">Resolved</SelectItem>
-              <SelectItem value="closed">Closed</SelectItem>
+              <SelectItem value="open">{t("tickets.open")}</SelectItem>
+              <SelectItem value="in_progress">{t("tickets.inProgress")}</SelectItem>
+              <SelectItem value="pending">{t("common.pending")}</SelectItem>
+              <SelectItem value="resolved">{t("common.resolved")}</SelectItem>
+              <SelectItem value="closed">{t("tickets.closed")}</SelectItem>
             </SelectContent>
           </Select>
           <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
             <Bot className="w-4 h-4 mr-2" />
-            AI Suggestion
+            {t("tickets.aiSuggestion")}
           </Button>
         </div>
       </div>
@@ -134,10 +139,10 @@ export function TicketDetail() {
         <div className="lg:col-span-2 flex flex-col gap-6 h-full">
           <Card className="border-card-border bg-card shrink-0">
             <CardHeader className="pb-4 border-b border-border/50">
-              <CardTitle className="text-lg">Description</CardTitle>
+              <CardTitle className="text-lg">{t("tickets.description")}</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 text-white/90 leading-relaxed whitespace-pre-wrap">
-              {ticket.description || 'No description provided.'}
+              {ticket.description || t("tickets.noDescription")}
             </CardContent>
           </Card>
 
@@ -145,7 +150,7 @@ export function TicketDetail() {
             <CardHeader className="py-3 border-b border-border/50 shrink-0">
               <CardTitle className="text-lg flex items-center gap-2">
                 <MessageSquare className="w-5 h-5 text-primary" />
-                Conversation
+                {t("tickets.conversation")}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -153,7 +158,7 @@ export function TicketDetail() {
                 <Skeleton className="h-20 w-full" />
               ) : comments?.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-muted-foreground italic">
-                  No comments yet.
+                  {t("tickets.noComments")}
                 </div>
               ) : (
                 comments?.map((comment) => (
@@ -165,7 +170,7 @@ export function TicketDetail() {
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-sm text-white">{comment.authorName}</span>
                         <span className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                          {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true, locale: dateLocale })}
                         </span>
                       </div>
                       <p className="text-sm text-white/80">{comment.content}</p>
@@ -176,8 +181,8 @@ export function TicketDetail() {
             </CardContent>
             <CardFooter className="p-4 border-t border-border/50 shrink-0 bg-background/50">
               <div className="flex gap-3 w-full">
-                <Textarea 
-                  placeholder="Type your response..." 
+                <Textarea
+                  placeholder={t("tickets.commentPlaceholder")}
                   className="resize-none h-10 min-h-[40px] bg-card border-card-border focus-visible:ring-primary"
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
@@ -188,8 +193,8 @@ export function TicketDetail() {
                     }
                   }}
                 />
-                <Button 
-                  size="icon" 
+                <Button
+                  size="icon"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
                   onClick={handlePostComment}
                   disabled={!commentText.trim() || addComment.isPending}
@@ -204,20 +209,20 @@ export function TicketDetail() {
         <div className="space-y-6">
           <Card className="border-card-border bg-card">
             <CardHeader>
-              <CardTitle>Ticket Details</CardTitle>
+              <CardTitle>{t("tickets.ticketDetails")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm">
               <div className="flex flex-col gap-1 py-2 border-b border-border/50">
-                <span className="text-muted-foreground text-xs uppercase tracking-wider">Priority</span>
+                <span className="text-muted-foreground text-xs uppercase tracking-wider">{t("tickets.priority")}</span>
                 <div><PriorityBadge priority={ticket.priority} /></div>
               </div>
               <div className="flex flex-col gap-1 py-2 border-b border-border/50">
-                <span className="text-muted-foreground text-xs uppercase tracking-wider">Category</span>
+                <span className="text-muted-foreground text-xs uppercase tracking-wider">{t("tickets.category")}</span>
                 <span className="text-white font-medium">{ticket.category}</span>
               </div>
               {ticket.deviceName && (
                 <div className="flex flex-col gap-1 py-2 border-b border-border/50">
-                  <span className="text-muted-foreground text-xs uppercase tracking-wider">Related Device</span>
+                  <span className="text-muted-foreground text-xs uppercase tracking-wider">{t("tickets.relatedDevice")}</span>
                   <Link href={`/devices/${ticket.deviceId}`}>
                     <span className="text-primary hover:underline flex items-center gap-1 font-mono cursor-pointer">
                       <HardDrive className="w-3.5 h-3.5" />
@@ -227,19 +232,19 @@ export function TicketDetail() {
                 </div>
               )}
               <div className="flex flex-col gap-1 py-2 border-b border-border/50">
-                <span className="text-muted-foreground text-xs uppercase tracking-wider">Assignee</span>
+                <span className="text-muted-foreground text-xs uppercase tracking-wider">{t("tickets.assignee")}</span>
                 <span className="text-white flex items-center gap-2">
                   <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center">
                     <User className="w-3 h-3 text-muted-foreground" />
                   </div>
-                  {ticket.assigneeName || 'Unassigned'}
+                  {ticket.assigneeName || t("tickets.unassigned")}
                 </span>
               </div>
               <div className="flex flex-col gap-1 py-2">
-                <span className="text-muted-foreground text-xs uppercase tracking-wider">SLA Deadline</span>
+                <span className="text-muted-foreground text-xs uppercase tracking-wider">{t("tickets.slaDeadline")}</span>
                 <span className="text-white flex items-center gap-2">
                   <Clock className="w-4 h-4 text-secondary" />
-                  {ticket.slaDeadline ? format(new Date(ticket.slaDeadline), "MMM d, HH:mm") : 'No SLA'}
+                  {ticket.slaDeadline ? format(new Date(ticket.slaDeadline), "MMM d, HH:mm") : t("tickets.noSla")}
                 </span>
               </div>
             </CardContent>
